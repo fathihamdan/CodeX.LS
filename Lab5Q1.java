@@ -32,6 +32,7 @@ public class Lab5Q1 {
                 min = score[i];
             }
         }
+        
         System.out.println("\nhighest score: "+max);
         System.out.println("lowest score: "+min);
         System.out.println("average: "+(total/n));
