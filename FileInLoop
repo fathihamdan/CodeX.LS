@@ -33,7 +33,7 @@ public class Lab21Nov_File {
         
         
         /*catch(IOException e){
-            System.out.println("An error happended");
+            System.out.println("An error happened");
             e.printStackTrace();
         }*/
         
