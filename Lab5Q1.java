@@ -40,5 +40,7 @@ public class Lab5Q1 {
         int a = 8;
         System.out.println("My name is orfan fathi bin hamdan");
         System.out.println("Testing 1,2,3");
+        int a = 1;
+        int b = 2;
     }
 }
