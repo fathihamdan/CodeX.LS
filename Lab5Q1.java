@@ -36,6 +36,8 @@ public class Lab5Q1 {
         System.out.println("\nhighest score: "+max);
         System.out.println("lowest score: "+min);
         System.out.println("average: "+(total/n));
+        System.out.println("testing");
+        int a = 8;
         
     }
 }
