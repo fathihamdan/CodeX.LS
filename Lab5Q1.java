@@ -38,6 +38,7 @@ public class Lab5Q1 {
         System.out.println("average: "+(total/n));
         System.out.println("testing");
         int a = 8;
-        
+        System.out.println("My name is orfan fathi bin hamdan");
+        System.out.println("Testing 1,2,3");
     }
 }
