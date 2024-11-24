@@ -6,7 +6,12 @@ public class LedgerSystem {
         Scanner sc = new Scanner(System.in);
         
         while(true){
-            System.out.print("Please enter your request:");
+            System.out.print("== Transaction ==");
+            System.out.print("1. Debit\n"
+                           + "2. Credit\n"
+                           + "3. History\n"
+                           + "4. Savings\n"
+                           + "5. Credit loan");
             int a = sc.nextInt();
         }
         
