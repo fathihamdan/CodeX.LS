@@ -4,7 +4,8 @@ import java.util.Scanner;
 public class LedgerSystem {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        
+        Double debit=0.0;
+
         while(true){
             System.out.println("== Transaction ==");
             System.out.println("1. Debit\n"
@@ -18,7 +19,8 @@ public class LedgerSystem {
                 case 1:
                     System.out.println("== Debit ==");
                     System.out.println("Enter amount:");
-                    sc.nextDouble();
+                    debit+=sc.nextDouble();
+                    System.out.println("Current debit: "+debit);
                     break;
                     
                 
