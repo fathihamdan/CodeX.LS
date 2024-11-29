@@ -1,8 +1,10 @@
 import java.util.Scanner;
+import java.time.LocalDate;
 public class LedgerSystem {
 
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
+        LocalDate CurrentDate = LocalDate.now();
         
         //User Registration Validation
         String regName=" ";
@@ -105,6 +107,7 @@ public class LedgerSystem {
 
         int count=0;
         Double balance =0.0;
+        Double [] CurrentBalance=new Double[100];
         Double savings =0.0;
         Double loan =0.0;
         boolean running = true;
@@ -134,7 +137,9 @@ public class LedgerSystem {
                         System.out.print("Enter  amount: ");
                         DebitCredit[count]=sc.nextDouble();
                         sc.nextLine();
+                        CurrentBalance[count]=balance+DebitCredit[count];
                         balance+=DebitCredit[count];
+
                         System.out.print("Enter description: ");
                         descDebitCredit[0][count]=sc.nextLine();
                         descDebitCredit[1][count]="Debit";
@@ -149,6 +154,7 @@ public class LedgerSystem {
                         System.out.print("Enter credit amount: ");
                         DebitCredit[count]=sc.nextDouble();
                         sc.nextLine();
+                        CurrentBalance[count]=balance-DebitCredit[count];
                         balance-=DebitCredit[count];
                         System.out.print("Enter description: ");
                         descDebitCredit[0][count]=sc.nextLine();
@@ -158,15 +164,21 @@ public class LedgerSystem {
                         System.out.println("\nCredit Successfully Recorded!!!\n");
                         break;
                     
+                
                     case 3:
                         System.out.println("\n== History ==");
+                        System.out.printf("%-10s%-20s%-20s%-15s%-15s%-15s\n", "No.","Date", "Description", "Debit","Credit","Balance");
                         for(int i=0; i<count;i++){
-                            System.out.print("\n"+(i+1)+".  "+descDebitCredit[1][i]+"   ");
+                            System.out.printf("\n%-10d%-20s%-20s", (i+1),CurrentDate, descDebitCredit[0][i]);
                             if(descDebitCredit[1][i].equals("Debit")){
-                                System.out.print("-");
+                                System.out.printf("%-15.2f",DebitCredit[i]);
+                                System.out.printf("               %-15.2f",CurrentBalance[i]);
+                            }else{
+                                System.out.printf("               %-15.2f",DebitCredit[i]);
+                                System.out.printf("%-15.2f",CurrentBalance[i]);
                             }
-                            System.out.print(DebitCredit[i]);
-                            System.out.print("  "+descDebitCredit[0][i]);
+                            
+
                         }
                         System.out.println("\nTotal: "+balance);
                         break;
