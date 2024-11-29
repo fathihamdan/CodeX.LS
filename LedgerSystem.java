@@ -101,7 +101,7 @@ public class LedgerSystem {
         }
         
         Double []DebitCredit=new Double[100];
-        String []descDebitCredit=new String[100];
+        String [][]descDebitCredit=new String[2][100];
 
         int count=0;
         Double balance =0.0;
@@ -136,7 +136,8 @@ public class LedgerSystem {
                         sc.nextLine();
                         balance+=DebitCredit[count];
                         System.out.print("Enter description: ");
-                        descDebitCredit[count]=sc.nextLine();
+                        descDebitCredit[0][count]=sc.nextLine();
+                        descDebitCredit[1][count]="Debit";
                         count++;
                         
                         System.out.println("\nDebit Successfully Recorded!!!\n");
@@ -145,21 +146,30 @@ public class LedgerSystem {
                 
                     case 2:
                         System.out.println("\n== Credit ==");
-                        System.out.println("Enter credit amount: ");
+                        System.out.print("Enter credit amount: ");
                         DebitCredit[count]=sc.nextDouble();
                         sc.nextLine();
                         balance-=DebitCredit[count];
-                        System.out.println("Enter description");
-                        descDebitCredit[count]=sc.nextLine();
+                        System.out.print("Enter description: ");
+                        descDebitCredit[0][count]=sc.nextLine();
+                        descDebitCredit[1][count]="Credit";
                         count++;
 
                         System.out.println("\nCredit Successfully Recorded!!!\n");
+                        break;
                     
                     case 3:
                         System.out.println("\n== History ==");
                         for(int i=0; i<count;i++){
-                            
+                            System.out.print("\n"+(i+1)+".  "+descDebitCredit[1][i]+"   ");
+                            if(descDebitCredit[1][i].equals("Debit")){
+                                System.out.print("-");
+                            }
+                            System.out.print(DebitCredit[i]);
+                            System.out.print("  "+descDebitCredit[0][i]);
                         }
+                        System.out.println("\nTotal: "+balance);
+                        break;
                     
                     case 4:
                     
