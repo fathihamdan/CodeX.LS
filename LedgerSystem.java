@@ -101,10 +101,14 @@ public class LedgerSystem {
                 System.out.println("\nPlease choose between 1 or 2 only.");
             }
         }
-        
-        Double []DebitCredit=new Double[100];
-        String [][]descDebitCredit=new String[2][100];
 
+        //Aqil&&Fathi
+        
+        Double []DebitCredit=new Double[100];    //Combine both Debit adn Credit in one array to ease the order of transaction
+        String [][]descDebitCredit=new String[2][100]; /*Two collums of array of Transaction description. 
+                                                        first collum is to label whether it is a Debit or Credit. 
+                                                        the other is to store the description
+                                                        */
         int count=0;
         Double balance =0.0;
         Double [] CurrentBalance=new Double[100];
