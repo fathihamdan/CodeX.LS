@@ -137,36 +137,74 @@ public class LedgerSystem {
             
                 switch (option){
                     case 1:
-                        System.out.println("\n== Debit ==");
-                        System.out.print("Enter  amount: ");
-                        DebitCredit[count]=sc.nextDouble();
-                        sc.nextLine();
-                        CurrentBalance[count]=balance+DebitCredit[count];
-                        balance+=DebitCredit[count];
-
-                        System.out.print("Enter description: ");
-                        descDebitCredit[0][count]=sc.nextLine();
-                        descDebitCredit[1][count]="Debit";
-                        count++;
-                        
-                        System.out.println("\nDebit Successfully Recorded!!!\n");
+                        while(true){
+                            System.out.println("\n== Debit ==");
+                            System.out.print("Enter debit amount: ");
+                            DebitCredit[count]=sc.nextDouble();
+                            sc.nextLine();
+                            if(DebitCredit[count]>1000000000){
+                                System.out.println("The amount exceeded 10 digits. Please try again.");
+                                
+                            }
+                            else if(DebitCredit[count]<0){
+                                System.out.println("Please insert positive value only.");
+                                
+                            }
+                            else{
+                                CurrentBalance[count]=balance+DebitCredit[count];
+                                balance+=DebitCredit[count];
+                                break;
+                            }
+                        }
+                        while(true){
+                            System.out.print("Enter description: ");
+                            descDebitCredit[0][count]=sc.nextLine();
+                            descDebitCredit[1][count]="Debit";
+                            
+                            if(descDebitCredit[0][count].length()>20){
+                                System.out.println("Transaction description exceeded 20 characters. Please try again.");
+                                
+                            }else{
+                                System.out.println("\nDebit Successfully Recorded!!!\n");
+                                count++;
+                                break;
+                            }
+                        }
                         break;
-                    
+                        
                 
                     case 2:
-                        System.out.println("\n== Credit ==");
-                        System.out.print("Enter credit amount: ");
-                        DebitCredit[count]=sc.nextDouble();
-                        sc.nextLine();
-                        CurrentBalance[count]=balance-DebitCredit[count];
-                        balance-=DebitCredit[count];
+                        while(true){
+                            System.out.println("\n== Credit ==");
+                            System.out.print("Enter credit amount: ");
+                            DebitCredit[count]=sc.nextDouble();
+                            sc.nextLine();
+                            if(DebitCredit[count]>1000000000){
+                                System.out.println("The amount exceeded 10 digits. Please try again.");
+                            }
+                            else if(DebitCredit[count]<0){
+                                System.out.println("Please insert positive value only.");
+                            }
+                            else{
+                                CurrentBalance[count]=balance-DebitCredit[count];
+                                balance-=DebitCredit[count];
+                                break;
+                            }
+                        }
+                        while(true){
+                            System.out.print("Enter description: ");
+                            descDebitCredit[0][count]=sc.nextLine();
+                            descDebitCredit[1][count]="Credit";
 
-                        System.out.print("Enter description: ");
-                        descDebitCredit[0][count]=sc.nextLine();
-                        descDebitCredit[1][count]="Credit";
-                        count++;
-
-                        System.out.println("\nCredit Successfully Recorded!!!\n");
+                            if(descDebitCredit[0][count].length()>20){
+                                System.out.println("Transaction description exceeded 20 characters. Please try again.");
+                            }
+                            else{
+                                System.out.println("\nCredit Successfully Recorded!!!\n");
+                                count++;
+                                break;
+                            }
+                        }
                         break;
                     
                 
@@ -203,9 +241,7 @@ public class LedgerSystem {
                         System.out.println("Invalid option. Please try again.");
                         break;
                 }
-            break;
             }   
-            break;
         }
     }
 }
