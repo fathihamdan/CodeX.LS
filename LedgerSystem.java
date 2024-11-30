@@ -142,13 +142,12 @@ public class LedgerSystem {
                             System.out.print("Enter debit amount: ");
                             DebitCredit[count]=sc.nextDouble();
                             sc.nextLine();
+
                             if(DebitCredit[count]>1000000000){
                                 System.out.println("The amount exceeded 10 digits. Please try again.");
-                                
                             }
                             else if(DebitCredit[count]<0){
-                                System.out.println("Please insert positive value only.");
-                                
+                                System.out.println("Please insert positive value only.");    
                             }
                             else{
                                 CurrentBalance[count]=balance+DebitCredit[count];
@@ -156,6 +155,7 @@ public class LedgerSystem {
                                 break;
                             }
                         }
+
                         while(true){
                             System.out.print("Enter description: ");
                             descDebitCredit[0][count]=sc.nextLine();
@@ -164,7 +164,8 @@ public class LedgerSystem {
                             if(descDebitCredit[0][count].length()>20){
                                 System.out.println("Transaction description exceeded 20 characters. Please try again.");
                                 
-                            }else{
+                            }
+                            else{
                                 System.out.println("\nDebit Successfully Recorded!!!\n");
                                 count++;
                                 break;
@@ -179,6 +180,7 @@ public class LedgerSystem {
                             System.out.print("Enter credit amount: ");
                             DebitCredit[count]=sc.nextDouble();
                             sc.nextLine();
+
                             if(DebitCredit[count]>1000000000){
                                 System.out.println("The amount exceeded 10 digits. Please try again.");
                             }
@@ -191,6 +193,7 @@ public class LedgerSystem {
                                 break;
                             }
                         }
+
                         while(true){
                             System.out.print("Enter description: ");
                             descDebitCredit[0][count]=sc.nextLine();
