@@ -104,7 +104,7 @@ public class LedgerSystem {
 
         //Aqil&&Fathi
         
-        Double []DebitCredit=new Double[100];    //Combine both Debit adn Credit in one array to ease the order of transaction
+        Double []DebitCredit=new Double[100];    //Combine both Debit adn Credit in one array to ease the order of transaction(but it is limited to 100 transactions only)
         String [][]descDebitCredit=new String[2][100]; /*Two collums of array of Transaction description. 
                                                         first collum is to label whether it is a Debit or Credit. 
                                                         the other is to store the description
@@ -160,6 +160,7 @@ public class LedgerSystem {
                         sc.nextLine();
                         CurrentBalance[count]=balance-DebitCredit[count];
                         balance-=DebitCredit[count];
+
                         System.out.print("Enter description: ");
                         descDebitCredit[0][count]=sc.nextLine();
                         descDebitCredit[1][count]="Credit";
@@ -204,6 +205,7 @@ public class LedgerSystem {
                 }
             break;
             }   
+            break;
         }
     }
 }
