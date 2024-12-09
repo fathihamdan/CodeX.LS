@@ -115,6 +115,8 @@ public class LedgerSystem {
         Double savings =0.0;
         Double loan =0.0;
         boolean running = true;
+        boolean saving = false;
+        Double SavingPercent = 0.0;
         
         while(true){
             System.out.println("\n== Welcome, "+regName+" ==");
@@ -230,6 +232,48 @@ public class LedgerSystem {
                         break;
                     
                     case 4:
+                        System.out.println("== Savings ==");
+                        if(saving == false){
+                            System.out.print("Are you sure you want to activate it? (Y/N) : ");
+                            String YesNo = sc.next();
+                            sc.nextLine();
+                            if(YesNo.equals("Y")){
+                                saving = true;
+                                System.out.print("Please enter the percentage you wish to deduct from your next debit: ");
+                                SavingPercent = sc.nextDouble();
+                                sc.nextLine();
+                                System.out.println(SavingPercent+"% will be auto deduct from your next debit.");
+                                System.out.println("Savings settings added successfully!!!");
+                                break;
+                            } 
+                            else if(YesNo.equals("N")){
+                                saving = false;
+                                break;
+                            }
+                            else{
+                                System.out.println("Wrong input sucker!");
+                                break;
+                            }
+                        }
+                        else if(saving == true){
+                            System.out.println("You have already activated Savings.");
+                            System.out.println("Would you like to deactivate it?");
+                            String YN = sc.nextLine();
+                            sc.nextLine();
+                            if(YN.equals("Y")){
+                                saving = false;
+                                System.out.println("Current saving percentage: "+SavingPercent);
+                                System.out.println("Saving deactivated successfully");
+                                break;
+                            }
+                            else if(YN.equals("N")){
+                                break;
+                            }
+                            else{
+                                System.out.println("Wrong input sucker!");
+                            }
+                        }
+                        break;
                     
                     case 5:
                     
