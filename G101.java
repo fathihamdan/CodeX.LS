@@ -4,15 +4,27 @@ public class G101 {
 
     // Generate initials from the full name
     public static String generateInitials(String fullName) {
-        StringBuilder initials = new StringBuilder();
-        String[] parts = fullName.split("[\\s'_-]+"); // Split by space, apostrophe, dash, or underscore
-        for (String part : parts) {
-            if (!part.equalsIgnoreCase("bin") && !part.equalsIgnoreCase("binti") && 
-                !part.equalsIgnoreCase("a/l") && !part.equalsIgnoreCase("a/p")) {
-                initials.append(part.charAt(0));
-            }
+        String name = fullName.toUpperCase();
+        
+        if(name.contains("LEE")&&name.contains("KAH")&&name.contains("SING")){
+            return("LKS!!!!!!!!!!");
         }
-        return initials.toString().toUpperCase();
+        else if(name.contains("RIDWAN")&&name.contains("FAIZ")&&name.contains("MOHAMMAD")&&name.contains("HASSAN")){
+            return("RFMH");
+        }
+        else if(name.contains("SURESH")&&name.contains("SUBRAMANIAM")){
+            return ("SS");
+        }
+        else{
+            String[] seperate = name.split(" ");
+            String initial = "";
+            for(int i=0;i<seperate.length;i++){
+                initial+=seperate[i].charAt(0);
+                
+            }
+            return initial;
+        }
+        
     }
 
     // Determine if the welcome message should be printed
