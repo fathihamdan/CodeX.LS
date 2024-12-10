@@ -16,6 +16,8 @@ public class Viva2Q6 {
             return ("SS");
         }
         else{
+            name = name.replaceAll("[^a-zA-Z0-9]", " ");
+            name = name.replaceAll("\\b(BIN |bin |BINTI |binti |A/L |a/l |AL |al |A/P |a/p |AP |ap |VAN |van |VON |von )\\b", "");
             String[] seperate = name.split(" ");
             String initial = "";
             for(int i=0;i<seperate.length;i++){
@@ -41,7 +43,7 @@ public class Viva2Q6 {
 }
 
     // Calculate time interval between start and end times
-    public static String calculateInterval(String startTime, String endTime) {
+    public static void calculateInterval(String startTime, String endTime) {
         String[] startParts = startTime.split(":");
         String[] endParts = endTime.split(":");
 
@@ -69,7 +71,7 @@ public class Viva2Q6 {
         int minutes = (interval % 3600) / 60;
         int seconds = interval % 60;
 
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        System.out.printf("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public static void main(String[] args) {
@@ -107,9 +109,10 @@ public class Viva2Q6 {
         }
 
         // Time interval
-        String interval = calculateInterval(startTime, endTime);
-        System.out.println(interval);
+        calculateInterval(startTime, endTime);
+        
 
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 }
+
