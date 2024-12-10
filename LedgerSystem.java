@@ -257,12 +257,13 @@ public class LedgerSystem {
                         }
                         else if(saving == true){
                             System.out.println("You have already activated Savings.");
+                            System.out.println("Current saving percentage: "+SavingPercent);
                             System.out.println("Would you like to deactivate it?");
                             String YN = sc.nextLine();
                             sc.nextLine();
                             if(YN.equals("Y")){
                                 saving = false;
-                                System.out.println("Current saving percentage: "+SavingPercent);
+                                SavingPercent = 0.0;
                                 System.out.println("Saving deactivated successfully");
                                 break;
                             }
