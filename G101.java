@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class G101 {
+public class Viva2Q6 {
 
     // Generate initials from the full name
     public static String generateInitials(String fullName) {
@@ -17,8 +17,16 @@ public class G101 {
 
     // Determine if the welcome message should be printed
     public static boolean isPrintingWelcomeMessage(String fullName) {
-        return fullName.matches("(?i)(kah sing|lee kah sing|kah sing lee|ridwan|ridwan faiz|ridwan faiz mohamad hassan|suresh|suresh a/l subramaniam)");
-    }
+    fullName = fullName.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+    if (fullName.equals("kah sing") || fullName.equals("lee kah sing") || fullName.equals("kah sing lee"))
+        return true;
+    else if (fullName.equals("ridwan") || fullName.equals("ridwan faiz") || fullName.equals("ridwan faiz mohamad hassan"))
+        return true;
+    else if (fullName.equals("suresh") || fullName.equals("suresh a/l subramaniam"))
+        return true;
+    else
+    return false;
+}
 
     // Calculate time interval between start and end times
     public static String calculateInterval(String startTime, String endTime) {
