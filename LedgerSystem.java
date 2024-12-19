@@ -110,15 +110,17 @@ public class LedgerSystem {
                                                         the other is to store the description
                                                         */
         int count=0;
+        boolean running = true;
         Double balance =0.0;
         Double [] CurrentBalance=new Double[100];
         Double savings =0.0;
         Double loan =0.0;
-        boolean running = true;
-        boolean saving = false;
         Double SavingPercent = 0.0;
+        boolean SavingActivated = false;
+
         
         while(true){
+            
             System.out.println("\n== Welcome, "+regName+" ==");
             System.out.println("Balance: "+balance);
             System.out.println("Savings: "+savings);
@@ -152,6 +154,16 @@ public class LedgerSystem {
                                 System.out.println("Please insert positive value only.");    
                             }
                             else{
+
+                                //if savings was activated on option 4, these lines of code will run
+                                if(SavingActivated){
+                                    double savedMoney = (SavingPercent/100)*DebitCredit[count];
+                                    DebitCredit[count]= DebitCredit[count]-savedMoney;
+                                    savings+=savedMoney;
+                                    
+                                }
+
+                                
                                 CurrentBalance[count]=balance+DebitCredit[count];
                                 balance+=DebitCredit[count];
                                 break;
@@ -233,21 +245,22 @@ public class LedgerSystem {
                     
                     case 4:
                         System.out.println("== Savings ==");
-                        if(saving == false){
+                        if(SavingActivated == false){
                             System.out.print("Are you sure you want to activate it? (Y/N) : ");
                             String YesNo = sc.next();
                             sc.nextLine();
-                            if(YesNo.equals("Y")){
-                                saving = true;
+                            if(YesNo.equalsIgnoreCase("Y")){
+                                SavingActivated = true;
                                 System.out.print("Please enter the percentage you wish to deduct from your next debit: ");
                                 SavingPercent = sc.nextDouble();
                                 sc.nextLine();
                                 System.out.println(SavingPercent+"% will be auto deduct from your next debit.");
                                 System.out.println("Savings settings added successfully!!!");
+                                SavingActivated = true;
                                 break;
                             } 
-                            else if(YesNo.equals("N")){
-                                saving = false;
+                            else if(YesNo.equalsIgnoreCase("N")){
+                                SavingActivated = false;
                                 break;
                             }
                             else{
@@ -255,19 +268,19 @@ public class LedgerSystem {
                                 break;
                             }
                         }
-                        else if(saving == true){
+                        else if(SavingActivated == true){
                             System.out.println("You have already activated Savings.");
                             System.out.println("Current saving percentage: "+SavingPercent);
                             System.out.println("Would you like to deactivate it?");
                             String YN = sc.nextLine();
                             sc.nextLine();
-                            if(YN.equals("Y")){
-                                saving = false;
+                            if(YN.equalsIgnoreCase("Y")){
+                                SavingActivated = false;
                                 SavingPercent = 0.0;
                                 System.out.println("Saving deactivated successfully");
                                 break;
                             }
-                            else if(YN.equals("N")){
+                            else if(YN.equalsIgnoreCase("N")){
                                 break;
                             }
                             else{
@@ -289,6 +302,7 @@ public class LedgerSystem {
                         System.out.println("Invalid option. Please try again.");
                         break;
                 }
+                break;
             }   
         }
     }

@@ -71,7 +71,7 @@ public class Viva2Q6 {
         int minutes = (interval % 3600) / 60;
         int seconds = interval % 60;
 
-        System.out.printf("%02d:%02d:%02d", hours, minutes, seconds);
+        System.out.println(String.format("%02d:%02d:%02d", hours, minutes, seconds));
     }
 
     public static void main(String[] args) {
@@ -109,9 +109,9 @@ public class Viva2Q6 {
         }
 
         // Time interval
-        calculateInterval(startTime, endTime);
-        
+        String interval = calculateInterval(startTime, endTime);
+        System.out.println(interval);
 
-        System.out.println("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 }
