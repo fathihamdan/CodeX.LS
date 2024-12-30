@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 public class LedgerSystem {
 
     public static void main(String[] args) {
@@ -12,6 +13,10 @@ public class LedgerSystem {
         String regPass=" ";
         String regEmailValid=" ";
         String regPassValid=" ";
+        LocalDate loanStartDate = null;
+        int repaymentPeriod =0;
+        double loan = 0.0;
+        int monthsPaid =0;
         
         while(true){
             System.out.println("\n== Ledger System ==");
@@ -88,6 +93,15 @@ public class LedgerSystem {
                 
                     if(email.equals(regEmailValid)&&pass.equals(regPassValid)){
                         System.out.println("\nLogin Successful!!!\n");
+
+                        //reminder for loan repayment
+                        if(loan >0 && loanStartDate != null && !HasPaidThisMonth(loanStartDate, repaymentPeriod, monthsPaid)){
+                            LocalDate dueDate = loanStartDate.plusMonths(repaymentPeriod);
+                            long DaysUntilDue = ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
+                            
+                             System.out.printf("REMINDER!! Your loan repayment is due in %d days (Due Date: %s).\nPlease pay your monthly repayment.", DaysUntilDue,dueDate);
+                        }
+                        
                         break;
                     }
                 
@@ -117,6 +131,7 @@ public class LedgerSystem {
         Double loan =0.0;
         Double SavingPercent = 0.0;
         boolean SavingActivated = false;
+        double monthlyRepayment = 0.0;
 
         
         while(true){
@@ -141,6 +156,11 @@ public class LedgerSystem {
             
                 switch (option){
                     case 1:
+                        if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
+                                System.out.println("Cannot perform debit. Please pay your monthly repayment first.");
+                                break;
+                            }
+                        
                         while(true){
                             System.out.println("\n== Debit ==");
                             System.out.print("Enter debit amount: ");
@@ -189,6 +209,11 @@ public class LedgerSystem {
                         
                 
                     case 2:
+                        if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
+                                System.out.println("Cannot perform credit. Please pay your monthly repayment first.");
+                                break;
+                            }
+                        
                         while(true){
                             System.out.println("\n== Credit ==");
                             System.out.print("Enter credit amount: ");
@@ -290,8 +315,71 @@ public class LedgerSystem {
                         break;
                     
                     case 5:
+                        System.out.println("\n== Credit Loan ==");
+                        System.out.println("1. Apply");
+                        System.out.println("2. Repay");
+                        System.out.print("\n>");
+                        int choice = sc.nextInt();
+                        sc.nextLine();                        
+                        
+                        if(choice == 1){ //apply loan
+                            System.out.print("Enter the total amount of money you want to take a loan: ");
+                            double P = validatepositiveinput(sc); // principal
+                            System.out.print("Enter the interest rate(%): ");
+                            double InterestRate = validatepositiveinput(sc);
+                            System.out.print("Enter the repayment period (in months): ");
+                            repaymentPeriod = (int) validatepositiveinput(sc);
+                            
+                            loanStartDate = CurrentDate;
+                            
+                            double r= (InterestRate/(100*12));
+                            double totalrepayment= (P*(r*Math.pow((1+r),repaymentPeriod)/(Math.pow((1+r),repaymentPeriod)-1)))*repaymentPeriod;
+                            loan = Math.round(totalrepayment * 100.0) / 100.0;// assign total repayment to loan
+                            monthlyRepayment = Math.round((totalrepayment/repaymentPeriod)*100.0) / 100.0;
+                            monthsPaid = 0;
+                            
+                            System.out.println("\nYour loan has been authorized!");
+                            System.out.printf("Total repayment amount: %.2f\n",totalrepayment);
+                            System.out.printf("Monthly repayment : %.2f\n", monthlyRepayment );                                                                                                                
+                            
+                        }else if(choice ==2){ //repay loan
+                            if(loan >0){
+                                System.out.printf("Monthly repayment: %.2f\n",monthlyRepayment);
+                                System.out.print("Enter the amount you want to repay :");
+                                double repayment = validatepositiveinput(sc);
+                                
+                                if(repayment == monthlyRepayment){
+                                    loan -= repayment;
+                                    loan = Math.max(loan,0.0); //to make sure loan doesn't go negative
+                                    monthsPaid++;
+                                    
+                                    System.out.printf("Repayment successful!! Remaining loan balance : %.2f\n", loan);
+                                    
+                                    if(loan==0){
+                                        System.out.println("Congratulations! Your loan has been fully repaid");
+                                    }
+                                    
+                                }else if(repayment < monthlyRepayment){
+                                    System.out.println("Insufficient repayment. Please pay the exact monthly repayment amount.");                                        
+                                }else{
+                                    System.out.println("Overpayment is not allowed. Please pay the exact monthly repayment amount.");           
+                                    }
+                                
+                            }else{
+                                System.out.println("No active loan to repay");
+                            }
+                        }
+                        System.out.println();
+                        break;
                     
                     case 6:
+                        System.out.println("\n== Deposit Interest Predictor ==");                       
+                        System.out.print("Enter bank interest rate(%): ");
+                        double rate = validatepositiveinput(sc);                       
+                        
+                        double interest = (balance*(rate/100))/12;
+                        System.out.printf("Predicted interest monthly: %.2f\n", interest);
+                        break;
 
                     case 7:
                         System.out.println("Thank you for using Ledger System!");
@@ -306,4 +394,25 @@ public class LedgerSystem {
             }   
         }
     }
+    public static boolean HasPaidThisMonth(LocalDate loanStartDate, int repaymentPeriod, int monthsPaid){
+        if(loanStartDate == null || monthsPaid >= repaymentPeriod){
+            return true; // no loan or fully paid
+        }
+        LocalDate dueDate = loanStartDate.plusMonths(monthsPaid);
+        return !LocalDate.now().isAfter(dueDate);
+    }
+
+    public static double validatepositiveinput(Scanner sc){
+        double value;
+        while(true){
+            value = sc.nextDouble();
+            if(value>0){
+                break;
+            }else{
+                System.out.print("Invalid input.Please enter a positive value: ");
+            }            
+        }
+        return value;
+    }
 }
+
