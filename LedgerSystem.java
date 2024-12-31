@@ -164,7 +164,7 @@ public class LedgerSystem {
                         }
             
                         if (!found) {
-                            System.out.println("\nYour email or password is wrong.");
+                            JOptionPane.showMessageDialog(null,"\nYour email or password is wrong.","Ledger System",JOptionPane.WARNING_MESSAGE);
                         }
                     } catch (FileNotFoundException e) {
                         System.out.println("The file does not exist. Please add data first.");
@@ -219,21 +219,21 @@ public class LedgerSystem {
                 switch (option){
                     case 0:
                         if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
-                                System.out.println("Cannot perform debit. Please pay your monthly repayment first.");
+                                JOptionPane.showMessageDialog(null,"Cannot perform debit. Please pay your monthly repayment first.","Ledger System",JOptionPane.WARNING_MESSAGE);
                                 break;
                             }
                         
                         while(true){
-                            System.out.println("\n== Debit ==");
-                            System.out.print("Enter debit amount: ");
-                            DebitCredit[count]=sc.nextDouble();
-                            sc.nextLine();
+
+
+
+                            DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog("Enter debit amount: "));
 
                             if(DebitCredit[count]>1000000000){
-                                System.out.println("The amount exceeded 10 digits. Please try again.");
+                                JOptionPane.showMessageDialog(null,"The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
                             }
                             else if(DebitCredit[count]<0){
-                                System.out.println("Please insert positive value only.");    
+                                JOptionPane.showInputDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);    
                             }
                             else{
 
@@ -253,16 +253,16 @@ public class LedgerSystem {
                         }
 
                         while(true){
-                            System.out.print("Enter description: ");
-                            descDebitCredit[0][count]=sc.nextLine();
+                            
+                            descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                             descDebitCredit[1][count]="Debit";
                             
                             if(descDebitCredit[0][count].length()>20){
-                                System.out.println("Transaction description exceeded 20 characters. Please try again.");
+                                JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
                                 
                             }
                             else{
-                                System.out.println("\nDebit Successfully Recorded!!!\n");
+                                JOptionPane.showMessageDialog(null,"\nDebit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                                 count++;
                                 break;
                             }
@@ -272,21 +272,19 @@ public class LedgerSystem {
                 
                     case 1:
                         if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
-                                System.out.println("Cannot perform credit. Please pay your monthly repayment first.");
+                                JOptionPane.showMessageDialog(null,"Cannot perform credit. Please pay your monthly repayment first.","Ledger System",JOptionPane.WARNING_MESSAGE);
                                 break;
                             }
                         
                         while(true){
-                            System.out.println("\n== Credit ==");
-                            System.out.print("Enter credit amount: ");
-                            DebitCredit[count]=sc.nextDouble();
-                            sc.nextLine();
+
+                            DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter credit amount: ","Ledger System",JOptionPane.INFORMATION_MESSAGE));
 
                             if(DebitCredit[count]>1000000000){
-                                System.out.println("The amount exceeded 10 digits. Please try again.");
+                                JOptionPane.showMessageDialog(null, "The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
                             }
                             else if(DebitCredit[count]<0){
-                                System.out.println("Please insert positive value only.");
+                                JOptionPane.showMessageDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);
                             }
                             else{
                                 CurrentBalance[count]=balance-DebitCredit[count];
@@ -296,15 +294,15 @@ public class LedgerSystem {
                         }
 
                         while(true){
-                            System.out.print("Enter description: ");
-                            descDebitCredit[0][count]=sc.nextLine();
+
+                            descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                             descDebitCredit[1][count]="Credit";
 
                             if(descDebitCredit[0][count].length()>20){
-                                System.out.println("Transaction description exceeded 20 characters. Please try again.");
+                                JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
                             }
                             else{
-                                System.out.println("\nCredit Successfully Recorded!!!\n");
+                                JOptionPane.showMessageDialog(null,"\nCredit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                                 count++;
                                 break;
                             }
@@ -313,7 +311,7 @@ public class LedgerSystem {
                     
                 
                     case 2:
-                        System.out.println("\n== History ==");
+
                         filterAndSortHistory(sc, DebitCredit, descDebitCredit, transactionDates, count);
                         break;
                     
