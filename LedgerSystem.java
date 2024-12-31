@@ -265,20 +265,7 @@ public class LedgerSystem {
                 
                     case 3:
                         System.out.println("\n== History ==");
-                        System.out.printf("%-10s%-20s%-20s%-15s%-15s%-15s\n", "No.","Date", "Description", "Debit","Credit","Balance");
-                        for(int i=0; i<count;i++){
-                            System.out.printf("\n%-10d%-20s%-20s", (i+1),CurrentDate, descDebitCredit[0][i]);
-                            if(descDebitCredit[1][i].equals("Debit")){
-                                System.out.printf("%-15.2f",DebitCredit[i]);
-                                System.out.printf("               %-15.2f",CurrentBalance[i]);
-                            }else{
-                                System.out.printf("               %-15.2f",DebitCredit[i]);
-                                System.out.printf("%-15.2f",CurrentBalance[i]);
-                            }
-                            
-
-                        }
-                        System.out.println("\nTotal: "+balance);
+                        filterAndSortHistory(sc, DebitCredit, descDebitCredit, transactionDates, count);
                         break;
                     
                     case 4:
@@ -426,6 +413,157 @@ public class LedgerSystem {
             }            
         }
         return value;
+    }
+
+    public static void filterAndSortHistory(Scanner sc, Double[] DebitCredit, String[][] descDebitCredit, LocalDate[] transactionDates, int count) {
+        List<Transaction> transactions = new ArrayList<>();
+    
+        // Collect transactions
+        for (int i = 0; i < count; i++) {
+            transactions.add(new Transaction(transactionDates[i], descDebitCredit[0][i], DebitCredit[i], descDebitCredit[1][i]));
+        }
+    
+        while (true) {
+            try {
+                // History options
+                System.out.println("1. Filter");
+                System.out.println("2. Sort");
+                System.out.println("3. View all");
+                System.out.println("4. Back");
+                System.out.print("\n>");
+                int historyOption = sc.nextInt();
+                sc.nextLine(); // Consume newline
+    
+                switch (historyOption) {
+                    // Filter option
+                    case 1:
+                        System.out.println("1. By Date");
+                        System.out.println("2. By Amount");
+                        System.out.println("3. By Transaction");
+                        System.out.println("4. Back");
+                        System.out.print("\n>");
+                        int filterOption = sc.nextInt();
+                        sc.nextLine(); // Consume newline
+    
+                        switch (filterOption) {
+                            case 1:
+                                System.out.print("Enter start date (YYYY-MM-DD): ");
+                                LocalDate startDate = LocalDate.parse(sc.nextLine());
+                                System.out.print("Enter end date (YYYY-MM-DD): ");
+                                LocalDate endDate = LocalDate.parse(sc.nextLine());
+                                transactions.removeIf(t -> t.date.isBefore(startDate) || t.date.isAfter(endDate.plusDays(1)));
+                                break;
+    
+                            case 2:
+                                System.out.print("Enter minimum amount: ");
+                                double minAmount = sc.nextDouble();
+                                System.out.print("Enter maximum amount: ");
+                                double maxAmount = sc.nextDouble();
+                                transactions.removeIf(t -> t.amount < minAmount || t.amount > maxAmount);
+                                sc.nextLine(); // Consume newline
+                                break;
+    
+                            case 3:
+                                System.out.print("Enter transaction type (Debit/Credit): ");
+                                String type = sc.nextLine();
+                                transactions.removeIf(t -> !t.type.equalsIgnoreCase(type));
+                                break;
+    
+                            case 4:
+                                return;
+    
+                            default:
+                                System.out.println("Invalid option.");
+                                return;
+                        }
+                        break;
+    
+                    // Sorting option    
+                    case 2:
+                        System.out.println("1. By Date (Newest to Oldest)");
+                        System.out.println("2. By Date (Oldest to Newest)");
+                        System.out.println("3. By Amount (Highest to Lowest)");
+                        System.out.println("4. By Amount (Lowest to Highest)");
+                        System.out.println("5. Back");
+                        System.out.print("\n>");
+                        int sortOption = sc.nextInt();
+                        sc.nextLine(); // Consume newline
+    
+                        switch (sortOption) {
+                            case 1:
+                                transactions.sort(Comparator.comparing(Transaction::getDate).reversed());
+                                break;
+    
+                            case 2:
+                                transactions.sort(Comparator.comparing(Transaction::getDate));
+                                break;
+    
+                            case 3:
+                                transactions.sort(Comparator.comparing(Transaction::getAmount).reversed());
+                                break;
+    
+                            case 4:
+                                transactions.sort(Comparator.comparing(Transaction::getAmount));
+                                break;
+    
+                            case 5:
+                                return;
+    
+                            default:
+                                System.out.println("Invalid option.");
+                                return;
+                        }
+                        break;
+    
+                    case 3:
+                        // Display all transactions
+                        break;
+    
+                    case 4:
+                        // No filter applied
+                        return;
+    
+                    default:
+                        System.out.println("Invalid option.");
+                        return;
+                }
+    
+                // Display filtered or sorted transactions
+                System.out.printf("%-10s%-20s%-20s%-15s%-15s\n", "No.", "Date", "Description", "Amount", "Type");
+                for (int i = 0; i < transactions.size(); i++) {
+                    Transaction t = transactions.get(i);
+                    System.out.printf("%-10d%-20s%-20s%-15.2f%-15s\n", (i + 1), t.date, t.description, t.amount, t.type);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.nextLine(); // Clear the invalid input
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
+            }
+        }
+    }
+    
+    static class Transaction {
+    
+        LocalDate date;
+        String description;
+        double amount;
+        String type;
+    
+        Transaction(LocalDate date, String description, double amount, String type) {
+            this.date = date;
+            this.description = description;
+            this.amount = amount;
+            this.type = type;
+        }
+    
+        public LocalDate getDate() {
+            return date;
+        }
+    
+        public double getAmount() {
+            return amount;
+        }
     }
 }
 
