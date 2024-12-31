@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import javax.swing.*;
 public class LedgerSystem {
 
     public static void main(String[] args) {
@@ -8,6 +9,8 @@ public class LedgerSystem {
         LocalDate CurrentDate = LocalDate.now();
         
         //User Registration Validation
+
+
         String regName=" ";
         String regEmail=" ";
         String regPass=" ";
@@ -15,20 +18,14 @@ public class LedgerSystem {
         String regPassValid=" ";
         LocalDate loanStartDate = null;
         int repaymentPeriod =0;
-        double loan = 0.0;
+        Double loan = 0.0;
         int monthsPaid =0;
         
         while(true){
-            System.out.println("\n== Ledger System ==");
-            System.out.println("Login or Register");
-            System.out.println("1.Login");
-            System.out.println("2.Register");
-            System.out.print("\n>");
-            int LogReg=sc.nextInt();
             
-            sc.nextLine();
-        
-            if (LogReg==2){
+            int LogReg=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Login","Register"},"Login");
+
+            if (LogReg==1){
                 System.out.println("\n== Please fill in the form ==");
                 System.out.print("Name: ");
                 regName=sc.nextLine();
@@ -82,7 +79,7 @@ public class LedgerSystem {
                 }
             }
             
-            else if (LogReg==1){
+            else if (LogReg==0){
                 System.out.println("\n== Please enter your email and password ==");
                 
                 while(true){
@@ -128,7 +125,6 @@ public class LedgerSystem {
         Double balance =0.0;
         Double [] CurrentBalance=new Double[100];
         Double savings =0.0;
-        Double loan =0.0;
         Double SavingPercent = 0.0;
         boolean SavingActivated = false;
         double monthlyRepayment = 0.0;
