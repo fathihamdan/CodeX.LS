@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import org.mindrot.jbcrypt.BCrypt;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import javax.swing.*;
@@ -123,6 +124,7 @@ public class LedgerSystem {
 
 
                         JOptionPane.showMessageDialog(null,"\nRegister succesful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                        String hashedPass = hashPass(regPassValid);
                         break;
                     }
                     
@@ -144,7 +146,7 @@ public class LedgerSystem {
             
                         while ((line = reader.readLine()) != null) {
                             String[] parts = line.split(",");
-                            if (parts[1].equalsIgnoreCase(email)&&parts[2].equals(pass)) {
+                            if (parts[1].equalsIgnoreCase(email)&&verifyPassword(pass, hashedPass) {
                                 JOptionPane.showMessageDialog(null,"\nLogin Successful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                                 regName=parts[0];
                                 regEmail=parts[1];
@@ -441,6 +443,18 @@ public class LedgerSystem {
             }   
         }
     }
+    
+    //Generate hashed version of the password
+    public static String hashPassword(String plainPass) {
+        return BCrypt.hashpw(plainPass, BCrypt.gensalt(12));
+        //gensalt() make it more secure
+    }
+
+    // Verify a password
+    public static boolean verifyPassword(String plainPass, String hashedPass) {
+        return BCrypt.checkpw(plainPass, hashedPass);
+    }
+    
     public static boolean HasPaidThisMonth(LocalDate loanStartDate, int repaymentPeriod, int monthsPaid){
         if(loanStartDate == null || monthsPaid >= repaymentPeriod){
             return true; // no loan or fully paid
