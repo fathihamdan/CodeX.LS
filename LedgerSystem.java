@@ -473,27 +473,19 @@ public class LedgerSystem {
         while (true) {
             try {
                 // History options
-                System.out.println("1. Filter");
-                System.out.println("2. Sort");
-                System.out.println("3. View all");
-                System.out.println("4. Back");
-                System.out.print("\n>");
-                int historyOption = sc.nextInt();
-                sc.nextLine(); // Consume newline
+
+                int historyOption = JOptionPane.showOptionDialog(null,"History","Ledger System",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Filter","Sort","View All","Back"},"Filter");
+
     
                 switch (historyOption) {
                     // Filter option
-                    case 1:
-                        System.out.println("1. By Date");
-                        System.out.println("2. By Amount");
-                        System.out.println("3. By Transaction");
-                        System.out.println("4. Back");
-                        System.out.print("\n>");
-                        int filterOption = sc.nextInt();
-                        sc.nextLine(); // Consume newline
+                    case 0:
+
+                        int filterOption = JOptionPane.showOptionDialog(null,"Enter filter option: ","Ledger System",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"By Date","By Amount","By Transaction","Back"},"By Date");
+
     
                         switch (filterOption) {
-                            case 1:
+                            case 0:
                                 System.out.print("Enter start date (YYYY-MM-DD): ");
                                 LocalDate startDate = LocalDate.parse(sc.nextLine());
                                 System.out.print("Enter end date (YYYY-MM-DD): ");
@@ -501,7 +493,7 @@ public class LedgerSystem {
                                 transactions.removeIf(t -> t.date.isBefore(startDate) || t.date.isAfter(endDate.plusDays(1)));
                                 break;
     
-                            case 2:
+                            case 1:
                                 System.out.print("Enter minimum amount: ");
                                 double minAmount = sc.nextDouble();
                                 System.out.print("Enter maximum amount: ");
@@ -510,13 +502,13 @@ public class LedgerSystem {
                                 sc.nextLine(); // Consume newline
                                 break;
     
-                            case 3:
+                            case 2:
                                 System.out.print("Enter transaction type (Debit/Credit): ");
                                 String type = sc.nextLine();
                                 transactions.removeIf(t -> !t.type.equalsIgnoreCase(type));
                                 break;
     
-                            case 4:
+                            case 3:
                                 return;
     
                             default:
@@ -526,7 +518,7 @@ public class LedgerSystem {
                         break;
     
                     // Sorting option    
-                    case 2:
+                    case 1:
                         System.out.println("1. By Date (Newest to Oldest)");
                         System.out.println("2. By Date (Oldest to Newest)");
                         System.out.println("3. By Amount (Highest to Lowest)");
@@ -562,11 +554,11 @@ public class LedgerSystem {
                         }
                         break;
     
-                    case 3:
+                    case 2:
                         // Display all transactions
                         break;
     
-                    case 4:
+                    case 3:
                         // No filter applied
                         return;
     
