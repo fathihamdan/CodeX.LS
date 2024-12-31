@@ -483,76 +483,108 @@ public class LedgerSystem {
 
                         int filterOption = JOptionPane.showOptionDialog(null,"Enter filter option: ","Ledger System",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"By Date","By Amount","By Transaction","Back"},"By Date");
 
-    
+                        
                         switch (filterOption) {
+
+                            //by date
                             case 0:
-                                System.out.print("Enter start date (YYYY-MM-DD): ");
-                                LocalDate startDate = LocalDate.parse(sc.nextLine());
-                                System.out.print("Enter end date (YYYY-MM-DD): ");
-                                LocalDate endDate = LocalDate.parse(sc.nextLine());
+                                
+                                LocalDate startDate = LocalDate.parse(JOptionPane.showInputDialog(null,"Enter start date (YYYY-MM-DD): ","History",JOptionPane.INFORMATION_MESSAGE));
+                                
+                                LocalDate endDate = LocalDate.parse(JOptionPane.showInputDialog(null,"Enter end date (YYYY-MM-DD): ","History",JOptionPane.INFORMATION_MESSAGE));
                                 transactions.removeIf(t -> t.date.isBefore(startDate) || t.date.isAfter(endDate.plusDays(1)));
                                 break;
     
+                            //by amount
                             case 1:
-                                System.out.print("Enter minimum amount: ");
-                                double minAmount = sc.nextDouble();
-                                System.out.print("Enter maximum amount: ");
-                                double maxAmount = sc.nextDouble();
+                                
+                                double minAmount = Double.parseDouble(JOptionPane.showInputDialog(null,"Enter minimum amount: ","History",JOptionPane.INFORMATION_MESSAGE));
+                                
+                                double maxAmount = Double.parseDouble(JOptionPane.showInputDialog(null,"Enter maximum amount: ","History",JOptionPane.INFORMATION_MESSAGE));
                                 transactions.removeIf(t -> t.amount < minAmount || t.amount > maxAmount);
-                                sc.nextLine(); // Consume newline
                                 break;
     
+                            //by transaction
                             case 2:
-                                System.out.print("Enter transaction type (Debit/Credit): ");
-                                String type = sc.nextLine();
-                                transactions.removeIf(t -> !t.type.equalsIgnoreCase(type));
+                                
+                                int input = JOptionPane.showOptionDialog(null,"Enter transaction type (Debit/Credit): ","History",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Debit","Credit"},"Debit");
+                                String type = "";
+                                if(input == 0){
+                                    type = "Debit";
+                                    transactions.removeIf(t -> !t.type.equalsIgnoreCase("Debit"));
+                                }else if(input == 1){
+                                    type = "Credit";
+                                    transactions.removeIf(t -> !t.type.equalsIgnoreCase("Credit"));
+                                }
                                 break;
-    
+                                
+                            //back
                             case 3:
                                 return;
     
                             default:
-                                System.out.println("Invalid option.");
+                                JOptionPane.showMessageDialog(null,"Invalid option.","Ledger System",JOptionPane.WARNING_MESSAGE);
                                 return;
                         }
                         break;
     
                     // Sorting option    
                     case 1:
-                        System.out.println("1. By Date (Newest to Oldest)");
-                        System.out.println("2. By Date (Oldest to Newest)");
-                        System.out.println("3. By Amount (Highest to Lowest)");
-                        System.out.println("4. By Amount (Lowest to Highest)");
-                        System.out.println("5. Back");
-                        System.out.print("\n>");
-                        int sortOption = sc.nextInt();
-                        sc.nextLine(); // Consume newline
-    
-                        switch (sortOption) {
-                            case 1:
-                                transactions.sort(Comparator.comparing(Transaction::getDate).reversed());
-                                break;
-    
-                            case 2:
-                                transactions.sort(Comparator.comparing(Transaction::getDate));
-                                break;
-    
-                            case 3:
-                                transactions.sort(Comparator.comparing(Transaction::getAmount).reversed());
-                                break;
-    
-                            case 4:
-                                transactions.sort(Comparator.comparing(Transaction::getAmount));
-                                break;
-    
-                            case 5:
-                                return;
-    
-                            default:
-                                System.out.println("Invalid option.");
-                                return;
+
+                        int input = JOptionPane.showOptionDialog(null,"Enter sort option: ","Sorting",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"By Date","By Amount","Back"},"By Date (Newest to Oldest)");
+                        
+                        int sortOption;
+                        
+                        //by date
+                        if(input==0){
+                            sortOption = JOptionPane.showOptionDialog(null,"Sort by date","Sorting",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Newest to Oldest","Oldest to Newest"},"Newest to Oldest");
+                        
+                            switch (sortOption) {
+
+                                //newest to oldest
+                                case 0:
+                                    transactions.sort(Comparator.comparing(Transaction::getDate).reversed());
+                                    break;
+        
+                                //oldest to newest
+                                case 1:
+                                    transactions.sort(Comparator.comparing(Transaction::getDate));
+                                    break;
+        
+                                default:
+                                    System.out.println("Invalid option.");
+                                    return;
+                            }
+                            break;
                         }
-                        break;
+
+                        //by amount
+                        else if(input==1){
+                            sortOption = JOptionPane.showOptionDialog(null,"Sort by date","Sorting",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Highest to Lowest","Lowest to Highest"},"Highest to Lowest");
+                        
+                            switch (sortOption) {
+
+                                //highest to lowest
+                                case 0:
+                                    transactions.sort(Comparator.comparing(Transaction::getAmount).reversed());
+                                    break;
+        
+
+                                //lowest to highest
+                                case 1:
+                                    transactions.sort(Comparator.comparing(Transaction::getAmount));
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid option.");
+                                    return;
+                            }
+                            break;
+                        }else if(input==2){
+                            return;
+                        }
+
+    
     
                     case 2:
                         // Display all transactions
