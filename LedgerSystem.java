@@ -26,6 +26,10 @@ public class LedgerSystem {
             int LogReg=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Login","Register"},"Login");
 
             if (LogReg==1){
+
+                regName=JOptionPane.showInputDialog("Name: ");
+
+
                 System.out.println("\n== Please fill in the form ==");
                 System.out.print("Name: ");
                 regName=sc.nextLine();
@@ -38,9 +42,22 @@ public class LedgerSystem {
                         regEmailValid=regEmail;
                         break;
                     }
-                
+                    else if(regEmail.endsWith("@hotmail.com")){
+                        regEmailValid=regEmail;
+                        break;
+                    }
+                    else if(regEmail.endsWith("@yahoo.com")){
+                        regEmailValid=regEmail;
+                        break;
+                    }
+                    else if(regEmail.endsWith("@outlook.com")){
+                        regEmailValid=regEmail;
+                        break;
+                    }
+                    
                     else{
-                        System.out.println("\nEmail must be in correct format(name@gmail.com).\n");
+
+                        JOptionPane.showMessageDialog(null, "Email must be in correct format(name@gmail.com)","Ledger System",JOptionPane.WARNING_MESSAGE);
                     }
                 } 
                 
