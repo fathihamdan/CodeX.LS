@@ -131,27 +131,47 @@ public class LedgerSystem {
             
             else if (LogReg==0){
 
-                while(true){
+
+                boolean exitLoop=false;
+                while(!exitLoop){
                     String email=JOptionPane.showInputDialog("Email: ");
                     String pass=JOptionPane.showInputDialog("Password: ");
-                
-                    if(email.equals(regEmailValid)&&pass.equals(regPassValid)){
-                        System.out.println("\nLogin Successful!!!\n");
+                    
 
-                        //reminder for loan repayment
-                        if(loan >0 && loanStartDate != null && !HasPaidThisMonth(loanStartDate, repaymentPeriod, monthsPaid)){
-                            LocalDate dueDate = loanStartDate.plusMonths(repaymentPeriod);
-                            long DaysUntilDue = ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
-                            
-                             System.out.printf("REMINDER!! Your loan repayment is due in %d days (Due Date: %s).\nPlease pay your monthly repayment.", DaysUntilDue,dueDate);
+                    try (BufferedReader reader = new BufferedReader(new FileReader("user.csv"))) {
+                        String line;
+                        boolean found = false;
+            
+                        while ((line = reader.readLine()) != null) {
+                            String[] parts = line.split(",");
+                            if (parts[1].equalsIgnoreCase(email)&&parts[2].equals(pass)) {
+                                JOptionPane.showMessageDialog(null,"\nLogin Successful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                                regName=parts[0];
+                                regEmail=parts[1];
+                                found = true;
+
+                                //reminder for loan repayment
+                                if(loan >0 && loanStartDate != null && !HasPaidThisMonth(loanStartDate, repaymentPeriod, monthsPaid)){
+                                    LocalDate dueDate = loanStartDate.plusMonths(repaymentPeriod);
+                                    long DaysUntilDue = ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
+                                    
+                                    System.out.printf("REMINDER!! Your loan repayment is due in %d days (Due Date: %s).\nPlease pay your monthly repayment.", DaysUntilDue,dueDate);
+                                }
+
+                                exitLoop=true;
+                                break;
+                            }
                         }
-                        
-                        break;
+            
+                        if (!found) {
+                            System.out.println("\nYour email or password is wrong.");
+                        }
+                    } catch (FileNotFoundException e) {
+                        System.out.println("The file does not exist. Please add data first.");
+                    } catch (IOException e) {
+                        System.out.println("An error occurred while reading the file: " + e.getMessage());
                     }
-                
-                    else{
-                        System.out.println("\nYour email or password is wrong.");
-                    }
+
                 }
                 break;
             }
@@ -180,26 +200,24 @@ public class LedgerSystem {
         
         while(true){
             
-            System.out.println("\n== Welcome, "+regName+" ==");
-            System.out.println("Balance: "+balance);
-            System.out.println("Savings: "+savings);
-            System.out.println("Loan: "+loan);
+
+            
+            JOptionPane.showMessageDialog(null,"Welcome, "+regName+"! \nBalance: "+balance+"\nSavings: "+savings+"\nLoan: "+loan,"Ledger System",JOptionPane.INFORMATION_MESSAGE);
 
             while(running){
-            
-                System.out.println("\n== Transaction ==");
-                System.out.println("1. Debit\n"
-                               + "2. Credit\n"
-                               + "3. History\n"
-                               + "4. Savings\n"
-                               + "5. Credit loan\n"
-                               + "6. Deposit Interest Predictor\n"
-                               + "7. Logout");
-                System.out.print("\n>");
-                int option = sc.nextInt();
+                
+                int option=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Menu",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Debit","Credit","History","Savings","Credit Loan","Deposit Interest Predictor","Logout"},"Debit");
+                
+                        //        0. Debit
+                        //        1. Credit
+                        //        2. History
+                        //        3. Savings
+                        //        4. Credit loan
+                        //        5. Deposit Interest Predictor
+                        //        6. Logout
             
                 switch (option){
-                    case 1:
+                    case 0:
                         if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
                                 System.out.println("Cannot perform debit. Please pay your monthly repayment first.");
                                 break;
@@ -252,7 +270,7 @@ public class LedgerSystem {
                         break;
                         
                 
-                    case 2:
+                    case 1:
                         if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
                                 System.out.println("Cannot perform credit. Please pay your monthly repayment first.");
                                 break;
@@ -294,12 +312,12 @@ public class LedgerSystem {
                         break;
                     
                 
-                    case 3:
+                    case 2:
                         System.out.println("\n== History ==");
                         filterAndSortHistory(sc, DebitCredit, descDebitCredit, transactionDates, count);
                         break;
                     
-                    case 4:
+                    case 3:
                         System.out.println("== Savings ==");
                         if(SavingActivated == false){
                             System.out.print("Are you sure you want to activate it? (Y/N) : ");
@@ -345,7 +363,7 @@ public class LedgerSystem {
                         }
                         break;
                     
-                    case 5:
+                    case 4:
                         System.out.println("\n== Credit Loan ==");
                         System.out.println("1. Apply");
                         System.out.println("2. Repay");
@@ -403,7 +421,7 @@ public class LedgerSystem {
                         System.out.println();
                         break;
                     
-                    case 6:
+                    case 5:
                         System.out.println("\n== Deposit Interest Predictor ==");                       
                         System.out.print("Enter bank interest rate(%): ");
                         double rate = validatepositiveinput(sc);                       
@@ -412,7 +430,7 @@ public class LedgerSystem {
                         System.out.printf("Predicted interest monthly: %.2f\n", interest);
                         break;
 
-                    case 7:
+                    case 6:
                         System.out.println("Thank you for using Ledger System!");
                         running = false;
                         break;
