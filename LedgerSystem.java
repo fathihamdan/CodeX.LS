@@ -2,7 +2,18 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import javax.swing.*;
+import java.util.ArrayList;
+
+import java.io.*;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.InputMismatchException;
+
 public class LedgerSystem {
+
 
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
@@ -25,18 +36,16 @@ public class LedgerSystem {
             
             int LogReg=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Login","Register"},"Login");
 
+
+            //kalau user tekan Login button LogReg=0, kalau user tekan Register button LogReg=1
             if (LogReg==1){
 
                 regName=JOptionPane.showInputDialog("Name: ");
 
 
-                System.out.println("\n== Please fill in the form ==");
-                System.out.print("Name: ");
-                regName=sc.nextLine();
-                
                 while(true){
-                    System.out.print("Email: ");
-                    regEmail=sc.nextLine();
+                    
+                    regEmail=JOptionPane.showInputDialog("Email: ");
                 
                     if(regEmail.endsWith("@gmail.com")){
                         regEmailValid=regEmail;
@@ -62,16 +71,17 @@ public class LedgerSystem {
                 } 
                 
                 while(true){
-                    System.out.print("Password: ");
-                    regPass=sc.nextLine();
+                    
+                    regPass=JOptionPane.showInputDialog("Password: ");
                     
                     if (regPass.length()<8){
-                        System.out.println("\nPassword must be at least 8 characters.\n");
+                        JOptionPane.showMessageDialog(null,"\nPassword must be at least 8 characters.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
                     }
                     
                     boolean letter=false;
                     boolean digit=false;
                     boolean spec=false;
+                    boolean moreThan8Characters=false;
                     
                     for(int i=0; i<regPass.length(); i++){
                         char charac=regPass.charAt(i);
@@ -84,26 +94,46 @@ public class LedgerSystem {
                             spec=true;
                     }
                     
-                    if(letter&&digit&&spec){
+                    if(regPass.length()>=8){
+                        moreThan8Characters=true;
+                    }
+                    
+                    
+                    if(!letter){
+                        JOptionPane.showMessageDialog(null,"\nPassword must contain at least one letter.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                    }
+                    else if(!digit){
+                        JOptionPane.showMessageDialog(null,"\nPassword must contain at least one digit.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                    }
+                    else if(!spec){
+                        JOptionPane.showMessageDialog(null,"\nPassword must contain at least one special character.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                    }
+                    else if(!moreThan8Characters){
+                        JOptionPane.showMessageDialog(null,"\nPassword must be at least 8 characters.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                    
+                    }
+                    else {
                         regPassValid=regPass;
-                        System.out.println("\nRegister succesful!!!\n");
+
+                        try (FileWriter writer = new FileWriter("user.csv", true)) {
+                            writer.append(regName+","+regEmailValid+","+regPassValid+"\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        JOptionPane.showMessageDialog(null,"\nRegister succesful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                         break;
                     }
                     
-                    else{
-                        System.out.println("\nPassword must contain at least one letter, digit and special character.\n");
-                    }
                 }
             }
             
             else if (LogReg==0){
-                System.out.println("\n== Please enter your email and password ==");
-                
+
                 while(true){
-                    System.out.print("Email: ");
-                    String email=sc.nextLine();
-                    System.out.print("Password: ");
-                    String pass=sc.nextLine();
+                    String email=JOptionPane.showInputDialog("Email: ");
+                    String pass=JOptionPane.showInputDialog("Password: ");
                 
                     if(email.equals(regEmailValid)&&pass.equals(regPassValid)){
                         System.out.println("\nLogin Successful!!!\n");
@@ -137,6 +167,7 @@ public class LedgerSystem {
                                                         first collum is to label whether it is a Debit or Credit. 
                                                         the other is to store the description
                                                         */
+        LocalDate[] transactionDates = new LocalDate[100];
         int count=0;
         boolean running = true;
         Double balance =0.0;
