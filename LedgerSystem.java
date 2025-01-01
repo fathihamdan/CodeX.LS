@@ -114,17 +114,19 @@ public class LedgerSystem {
                     
                     }
                     else {
+                        
                         regPassValid=regPass;
+                        String hashedPass = hashPassword(regPassValid);
 
                         try (FileWriter writer = new FileWriter("user.csv", true)) {
-                            writer.append(regName+","+regEmailValid+","+regPassValid+"\n");
+                            writer.append(regName+","+regEmailValid+","+hashedPass+"\n");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
 
                         JOptionPane.showMessageDialog(null,"\nRegister succesful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
-                        String hashedPass = hashPass(regPassValid);
+                        
                         break;
                     }
                     
@@ -146,7 +148,7 @@ public class LedgerSystem {
             
                         while ((line = reader.readLine()) != null) {
                             String[] parts = line.split(",");
-                            if (parts[1].equalsIgnoreCase(email)&&verifyPassword(pass, hashedPass) {
+                            if (parts[1].equalsIgnoreCase(email)&&verifyPassword(pass, parts[2])) {
                                 JOptionPane.showMessageDialog(null,"\nLogin Successful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                                 regName=parts[0];
                                 regEmail=parts[1];
