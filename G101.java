@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Viva2Q6 {
+public class G101 {
 
     // Generate initials from the full name
     public static String generateInitials(String fullName) {

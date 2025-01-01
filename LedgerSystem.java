@@ -32,8 +32,10 @@ public class LedgerSystem {
         int repaymentPeriod =0;
         Double loan = 0.0;
         int monthsPaid =0;
+
+        boolean LedgerSystemRunning = true;
         
-        while(true){
+        while(LedgerSystemRunning){
             
             int LogReg=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Login","Register"},"Login");
 
@@ -43,10 +45,17 @@ public class LedgerSystem {
 
                 regName=JOptionPane.showInputDialog("Name: ");
 
+                if(regName==null){
+                    continue;
+                }
 
                 while(true){
                     
                     regEmail=JOptionPane.showInputDialog("Email: ");
+
+                    if(regEmail==null){
+                        continue;
+                    }
                 
                     if(regEmail.endsWith("@gmail.com")){
                         regEmailValid=regEmail;
@@ -74,6 +83,10 @@ public class LedgerSystem {
                 while(true){
                     
                     regPass=JOptionPane.showInputDialog("Password: ");
+
+                    if(regPass == null){
+                        continue;
+                    }
                     
                     if (regPass.length()<8){
                         JOptionPane.showMessageDialog(null,"\nPassword must be at least 8 characters.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
@@ -131,6 +144,7 @@ public class LedgerSystem {
                     }
                     
                 }
+                
             }
             
             else if (LogReg==0){
@@ -139,7 +153,13 @@ public class LedgerSystem {
                 boolean exitLoop=false;
                 while(!exitLoop){
                     String email=JOptionPane.showInputDialog("Email: ");
+                    if(email==null){
+                        continue;
+                    }
                     String pass=JOptionPane.showInputDialog("Password: ");
+                    if(pass==null){
+                        continue;
+                    }
                     
 
                     try (BufferedReader reader = new BufferedReader(new FileReader("user.csv"))) {
@@ -163,12 +183,13 @@ public class LedgerSystem {
                                 }
 
                                 exitLoop=true;
+                                
                                 break;
                             }
                         }
             
                         if (!found) {
-                            JOptionPane.showMessageDialog(null,"\nYour email or password is wrong.","Ledger System",JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(null,"\nYour email or password is wrong. Please try again","Ledger System",JOptionPane.WARNING_MESSAGE);
                         }
                     } catch (FileNotFoundException e) {
                         System.out.println("The file does not exist. Please add data first.");
@@ -177,273 +198,295 @@ public class LedgerSystem {
                     }
 
                 }
+                
+            }
+            else if(LogReg==-1){
+                LedgerSystemRunning = false;
                 break;
             }
             else{
                 System.out.println("\nPlease choose between 1 or 2 only.");
+                System.out.println(LogReg);
             }
-        }
+            
 
-        //Aqil&&Fathi
-        
-        Double []DebitCredit=new Double[100];    //Combine both Debit adn Credit in one array to ease the order of transaction(but it is limited to 100 transactions only)
-        String [][]descDebitCredit=new String[2][100]; /*Two collums of array of Transaction description. 
-                                                        first collum is to label whether it is a Debit or Credit. 
-                                                        the other is to store the description
-                                                        */
-        LocalDate[] transactionDates = new LocalDate[100];
-        int count=0;
-        boolean running = true;
-        Double balance =0.0;
-        Double [] CurrentBalance=new Double[100];
-        Double savings =0.0;
-        Double SavingPercent = 0.0;
-        boolean SavingActivated = false;
-        double monthlyRepayment = 0.0;
+            //Aqil&&Fathi
+            
+            Double []DebitCredit=new Double[100];    //Combine both Debit adn Credit in one array to ease the order of transaction(but it is limited to 100 transactions only)
+            String [][]descDebitCredit=new String[2][100]; /*Two collums of array of Transaction description. 
+                                                            first collum is to label whether it is a Debit or Credit. 
+                                                            the other is to store the description
+                                                            */
+            LocalDate[] transactionDates = new LocalDate[100];
+            int count=0;
+            boolean running = true;
+            Double balance =0.0;
+            Double [] CurrentBalance=new Double[100];
+            Double savings =0.0;
+            Double SavingPercent = 0.0;
+            boolean SavingActivated = false;
+            double monthlyRepayment = 0.0;
 
-        
-        while(true){
             
 
             
-            JOptionPane.showMessageDialog(null,"Welcome, "+regName+"! \nBalance: "+balance+"\nSavings: "+savings+"\nLoan: "+loan,"Ledger System",JOptionPane.INFORMATION_MESSAGE);
-
-            while(running){
+            
                 
-                int option=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Menu",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Debit","Credit","History","Savings","Credit Loan","Deposit Interest Predictor","Logout"},"Debit");
+
                 
-                        //        0. Debit
-                        //        1. Credit
-                        //        2. History
-                        //        3. Savings
-                        //        4. Credit loan
-                        //        5. Deposit Interest Predictor
-                        //        6. Logout
-            
-                switch (option){
-                    case 0:
-                        if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
-                                JOptionPane.showMessageDialog(null,"Cannot perform debit. Please pay your monthly repayment first.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                                break;
+                JOptionPane.showMessageDialog(null,"Welcome, "+regName+"! \nBalance: "+balance+"\nSavings: "+savings+"\nLoan: "+loan,"Ledger System",JOptionPane.INFORMATION_MESSAGE);
+
+                boolean logout = false;
+
+                while(!logout){
+                    
+                    int option=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Menu",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Debit","Credit","History","Savings","Credit Loan","Deposit Interest Predictor","Logout"},"Debit");
+                    
+                            //        0. Debit
+                            //        1. Credit
+                            //        2. History
+                            //        3. Savings
+                            //        4. Credit loan
+                            //        5. Deposit Interest Predictor
+                            //        6. Logout (go back to registration page)
+                            //       -1. Stop running ledger System
+                
+                    switch (option){
+                        case 0:
+                            if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
+                                    JOptionPane.showMessageDialog(null,"Cannot perform debit. Please pay your monthly repayment first.","Ledger System",JOptionPane.WARNING_MESSAGE);
+                                    break;
+                                }
+                            
+                            while(true){
+
+
+
+                                DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog("Enter debit amount: "));
+
+                                if(DebitCredit[count]>1000000000){
+                                    JOptionPane.showMessageDialog(null,"The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
+                                }
+                                else if(DebitCredit[count]<0){
+                                    JOptionPane.showInputDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);    
+                                }
+                                else{
+
+                                    //if savings was activated on option 4, these lines of code will run
+                                    if(SavingActivated){
+                                        double savedMoney = (SavingPercent/100)*DebitCredit[count];
+                                        DebitCredit[count]= DebitCredit[count]-savedMoney;
+                                        savings+=savedMoney;
+                                        
+                                    }
+
+                                    
+                                    CurrentBalance[count]=balance+DebitCredit[count];
+                                    balance+=DebitCredit[count];
+                                    break;
+                                }
                             }
-                        
-                        while(true){
 
-
-
-                            DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog("Enter debit amount: "));
-
-                            if(DebitCredit[count]>1000000000){
-                                JOptionPane.showMessageDialog(null,"The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                            }
-                            else if(DebitCredit[count]<0){
-                                JOptionPane.showInputDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);    
-                            }
-                            else{
-
-                                //if savings was activated on option 4, these lines of code will run
-                                if(SavingActivated){
-                                    double savedMoney = (SavingPercent/100)*DebitCredit[count];
-                                    DebitCredit[count]= DebitCredit[count]-savedMoney;
-                                    savings+=savedMoney;
+                            while(true){
+                                
+                                descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                                descDebitCredit[1][count]="Debit";
+                                
+                                if(descDebitCredit[0][count].length()>20){
+                                    JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
                                     
                                 }
-
-                                
-                                CurrentBalance[count]=balance+DebitCredit[count];
-                                balance+=DebitCredit[count];
-                                break;
+                                else{
+                                    JOptionPane.showMessageDialog(null,"\nDebit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                                    count++;
+                                    break;
+                                }
                             }
-                        }
-
-                        while(true){
+                            break;
                             
-                            descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
-                            descDebitCredit[1][count]="Debit";
+                    
+                        case 1:
+                            if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
+                                    JOptionPane.showMessageDialog(null,"Cannot perform credit. Please pay your monthly repayment first.","Ledger System",JOptionPane.WARNING_MESSAGE);
+                                    break;
+                                }
                             
-                            if(descDebitCredit[0][count].length()>20){
-                                JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                                
+                            while(true){
+
+                                DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter credit amount: ","Ledger System",JOptionPane.INFORMATION_MESSAGE));
+
+                                if(DebitCredit[count]>1000000000){
+                                    JOptionPane.showMessageDialog(null, "The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
+                                }
+                                else if(DebitCredit[count]<0){
+                                    JOptionPane.showMessageDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);
+                                }
+                                else{
+                                    CurrentBalance[count]=balance-DebitCredit[count];
+                                    balance-=DebitCredit[count];
+                                    break;
+                                }
                             }
-                            else{
-                                JOptionPane.showMessageDialog(null,"\nDebit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
-                                count++;
-                                break;
+
+                            while(true){
+
+                                descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                                descDebitCredit[1][count]="Credit";
+
+                                if(descDebitCredit[0][count].length()>20){
+                                    JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null,"\nCredit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                                    count++;
+                                    break;
+                                }
                             }
-                        }
-                        break;
+                            break;
                         
-                
-                    case 1:
-                        if(!HasPaidThisMonth(loanStartDate,repaymentPeriod, monthsPaid)){ //loan overdue restriction
-                                JOptionPane.showMessageDialog(null,"Cannot perform credit. Please pay your monthly repayment first.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                                break;
-                            }
+                    
+                        case 2:
+
+                            filterAndSortHistory(sc, DebitCredit, descDebitCredit, transactionDates, count);
+                            break;
                         
-                        while(true){
-
-                            DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter credit amount: ","Ledger System",JOptionPane.INFORMATION_MESSAGE));
-
-                            if(DebitCredit[count]>1000000000){
-                                JOptionPane.showMessageDialog(null, "The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                            }
-                            else if(DebitCredit[count]<0){
-                                JOptionPane.showMessageDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                            }
-                            else{
-                                CurrentBalance[count]=balance-DebitCredit[count];
-                                balance-=DebitCredit[count];
-                                break;
-                            }
-                        }
-
-                        while(true){
-
-                            descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
-                            descDebitCredit[1][count]="Credit";
-
-                            if(descDebitCredit[0][count].length()>20){
-                                JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(null,"\nCredit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
-                                count++;
-                                break;
-                            }
-                        }
-                        break;
-                    
-                
-                    case 2:
-
-                        filterAndSortHistory(sc, DebitCredit, descDebitCredit, transactionDates, count);
-                        break;
-                    
-                    case 3:
-                        System.out.println("== Savings ==");
-                        if(SavingActivated == false){
-                            System.out.print("Are you sure you want to activate it? (Y/N) : ");
-                            String YesNo = sc.next();
-                            sc.nextLine();
-                            if(YesNo.equalsIgnoreCase("Y")){
-                                SavingActivated = true;
-                                System.out.print("Please enter the percentage you wish to deduct from your next debit: ");
-                                SavingPercent = sc.nextDouble();
+                        case 3:
+                            System.out.println("== Savings ==");
+                            if(SavingActivated == false){
+                                System.out.print("Are you sure you want to activate it? (Y/N) : ");
+                                String YesNo = sc.next();
                                 sc.nextLine();
-                                System.out.println(SavingPercent+"% will be auto deduct from your next debit.");
-                                System.out.println("Savings settings added successfully!!!");
-                                SavingActivated = true;
-                                break;
-                            } 
-                            else if(YesNo.equalsIgnoreCase("N")){
-                                SavingActivated = false;
-                                break;
+                                if(YesNo.equalsIgnoreCase("Y")){
+                                    SavingActivated = true;
+                                    System.out.print("Please enter the percentage you wish to deduct from your next debit: ");
+                                    SavingPercent = sc.nextDouble();
+                                    sc.nextLine();
+                                    System.out.println(SavingPercent+"% will be auto deduct from your next debit.");
+                                    System.out.println("Savings settings added successfully!!!");
+                                    SavingActivated = true;
+                                    break;
+                                } 
+                                else if(YesNo.equalsIgnoreCase("N")){
+                                    SavingActivated = false;
+                                    break;
+                                }
+                                else{
+                                    System.out.println("Wrong input sucker!");
+                                    break;
+                                }
                             }
-                            else{
-                                System.out.println("Wrong input sucker!");
-                                break;
+                            else if(SavingActivated == true){
+                                System.out.println("You have already activated Savings.");
+                                System.out.println("Current saving percentage: "+SavingPercent);
+                                System.out.println("Would you like to deactivate it?");
+                                String YN = sc.nextLine();
+                                sc.nextLine();
+                                if(YN.equalsIgnoreCase("Y")){
+                                    SavingActivated = false;
+                                    SavingPercent = 0.0;
+                                    System.out.println("Saving deactivated successfully");
+                                    break;
+                                }
+                                else if(YN.equalsIgnoreCase("N")){
+                                    break;
+                                }
+                                else{
+                                    System.out.println("Wrong input sucker!");
+                                }
                             }
-                        }
-                        else if(SavingActivated == true){
-                            System.out.println("You have already activated Savings.");
-                            System.out.println("Current saving percentage: "+SavingPercent);
-                            System.out.println("Would you like to deactivate it?");
-                            String YN = sc.nextLine();
-                            sc.nextLine();
-                            if(YN.equalsIgnoreCase("Y")){
-                                SavingActivated = false;
-                                SavingPercent = 0.0;
-                                System.out.println("Saving deactivated successfully");
-                                break;
-                            }
-                            else if(YN.equalsIgnoreCase("N")){
-                                break;
-                            }
-                            else{
-                                System.out.println("Wrong input sucker!");
-                            }
-                        }
-                        break;
-                    
-                    case 4:
-                        System.out.println("\n== Credit Loan ==");
-                        System.out.println("1. Apply");
-                        System.out.println("2. Repay");
-                        System.out.print("\n>");
-                        int choice = sc.nextInt();
-                        sc.nextLine();                        
+                            break;
                         
-                        if(choice == 1){ //apply loan
-                            System.out.print("Enter the total amount of money you want to take a loan: ");
-                            double P = validatepositiveinput(sc); // principal
-                            System.out.print("Enter the interest rate(%): ");
-                            double InterestRate = validatepositiveinput(sc);
-                            System.out.print("Enter the repayment period (in months): ");
-                            repaymentPeriod = (int) validatepositiveinput(sc);
+                        case 4:
+                            System.out.println("\n== Credit Loan ==");
+                            System.out.println("1. Apply");
+                            System.out.println("2. Repay");
+                            System.out.print("\n>");
+                            int choice = sc.nextInt();
+                            sc.nextLine();                        
                             
-                            loanStartDate = CurrentDate;
-                            
-                            double r= (InterestRate/(100*12));
-                            double totalrepayment= (P*(r*Math.pow((1+r),repaymentPeriod)/(Math.pow((1+r),repaymentPeriod)-1)))*repaymentPeriod;
-                            loan = Math.round(totalrepayment * 100.0) / 100.0;// assign total repayment to loan
-                            monthlyRepayment = Math.round((totalrepayment/repaymentPeriod)*100.0) / 100.0;
-                            monthsPaid = 0;
-                            
-                            System.out.println("\nYour loan has been authorized!");
-                            System.out.printf("Total repayment amount: %.2f\n",totalrepayment);
-                            System.out.printf("Monthly repayment : %.2f\n", monthlyRepayment );                                                                                                                
-                            
-                        }else if(choice ==2){ //repay loan
-                            if(loan >0){
-                                System.out.printf("Monthly repayment: %.2f\n",monthlyRepayment);
-                                System.out.print("Enter the amount you want to repay :");
-                                double repayment = validatepositiveinput(sc);
+                            if(choice == 1){ //apply loan
+                                System.out.print("Enter the total amount of money you want to take a loan: ");
+                                double P = validatepositiveinput(sc); // principal
+                                System.out.print("Enter the interest rate(%): ");
+                                double InterestRate = validatepositiveinput(sc);
+                                System.out.print("Enter the repayment period (in months): ");
+                                repaymentPeriod = (int) validatepositiveinput(sc);
                                 
-                                if(repayment == monthlyRepayment){
-                                    loan -= repayment;
-                                    loan = Math.max(loan,0.0); //to make sure loan doesn't go negative
-                                    monthsPaid++;
+                                loanStartDate = CurrentDate;
+                                
+                                double r= (InterestRate/(100*12));
+                                double totalrepayment= (P*(r*Math.pow((1+r),repaymentPeriod)/(Math.pow((1+r),repaymentPeriod)-1)))*repaymentPeriod;
+                                loan = Math.round(totalrepayment * 100.0) / 100.0;// assign total repayment to loan
+                                monthlyRepayment = Math.round((totalrepayment/repaymentPeriod)*100.0) / 100.0;
+                                monthsPaid = 0;
+                                
+                                System.out.println("\nYour loan has been authorized!");
+                                System.out.printf("Total repayment amount: %.2f\n",totalrepayment);
+                                System.out.printf("Monthly repayment : %.2f\n", monthlyRepayment );                                                                                                                
+                                
+                            }else if(choice ==2){ //repay loan
+                                if(loan >0){
+                                    System.out.printf("Monthly repayment: %.2f\n",monthlyRepayment);
+                                    System.out.print("Enter the amount you want to repay :");
+                                    double repayment = validatepositiveinput(sc);
                                     
-                                    System.out.printf("Repayment successful!! Remaining loan balance : %.2f\n", loan);
+                                    if(repayment == monthlyRepayment){
+                                        loan -= repayment;
+                                        loan = Math.max(loan,0.0); //to make sure loan doesn't go negative
+                                        monthsPaid++;
+                                        
+                                        System.out.printf("Repayment successful!! Remaining loan balance : %.2f\n", loan);
+                                        
+                                        if(loan==0){
+                                            System.out.println("Congratulations! Your loan has been fully repaid");
+                                        }
+                                        
+                                    }else if(repayment < monthlyRepayment){
+                                        System.out.println("Insufficient repayment. Please pay the exact monthly repayment amount.");                                        
+                                    }else{
+                                        System.out.println("Overpayment is not allowed. Please pay the exact monthly repayment amount.");           
+                                        }
                                     
-                                    if(loan==0){
-                                        System.out.println("Congratulations! Your loan has been fully repaid");
-                                    }
-                                    
-                                }else if(repayment < monthlyRepayment){
-                                    System.out.println("Insufficient repayment. Please pay the exact monthly repayment amount.");                                        
                                 }else{
-                                    System.out.println("Overpayment is not allowed. Please pay the exact monthly repayment amount.");           
-                                    }
-                                
-                            }else{
-                                System.out.println("No active loan to repay");
+                                    System.out.println("No active loan to repay");
+                                }
                             }
-                        }
-                        System.out.println();
-                        break;
-                    
-                    case 5:
-                        System.out.println("\n== Deposit Interest Predictor ==");                       
-                        System.out.print("Enter bank interest rate(%): ");
-                        double rate = validatepositiveinput(sc);                       
+                            System.out.println();
+                            break;
                         
-                        double interest = (balance*(rate/100))/12;
-                        System.out.printf("Predicted interest monthly: %.2f\n", interest);
-                        break;
+                        case 5:
+                            System.out.println("\n== Deposit Interest Predictor ==");                       
+                            System.out.print("Enter bank interest rate(%): ");
+                            double rate = validatepositiveinput(sc);                       
+                            
+                            double interest = (balance*(rate/100))/12;
+                            System.out.printf("Predicted interest monthly: %.2f\n", interest);
+                            break;
 
-                    case 6:
-                        System.out.println("Thank you for using Ledger System!");
-                        running = false;
-                        break;
+                        //logout
+                        case 6:
+                            System.out.println("Thank you for using Ledger System!");
+                            
+                            logout = true;
+                            break;
 
-                    default:
-                        System.out.println("Invalid option. Please try again.");
-                        break;
-                }
-                break;
-            }   
+
+                        case -1:
+                            
+                            logout = true;
+                            LedgerSystemRunning = false;
+                            
+                            break;
+
+                        default:
+                            System.out.println("Invalid option. Please try again.");
+                            break;
+                    }
+                    
+                }   
+        
         }
+        System.out.println("Ledger System has stop running");   
     }
     
     //Generate hashed version of the password
@@ -616,10 +659,10 @@ public class LedgerSystem {
                 }
     
                 // Display filtered or sorted transactions
-                System.out.printf("%-10s%-20s%-20s%-15s%-15s\n", "No.", "Date", "Description", "Amount", "Type");
+                JOptionPane.showMessageDialog(null,String.format("%-10s%-20s%-20s%-15s%-15s\n", "No.", "Date", "Description", "Amount", "Type"));
                 for (int i = 0; i < transactions.size(); i++) {
                     Transaction t = transactions.get(i);
-                    System.out.printf("%-10d%-20s%-20s%-15.2f%-15s\n", (i + 1), t.date, t.description, t.amount, t.type);
+                    JOptionPane.showMessageDialog(null,String.format("%-10d%-20s%-20s%-15.2f%-15s\n", (i + 1), t.date, t.description, t.amount, t.type));
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
