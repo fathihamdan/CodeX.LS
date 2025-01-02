@@ -698,6 +698,18 @@ public class LedgerSystem {
                         case 5:
                         while (true) {
                             try {
+
+                                String[] banks = {"RHB", "Maybank", "Hong Leong", "Alliance", "AmBank", "Standard Chartered"};
+                                double[] INTEREST = {2.60, 2.50, 2.30, 2.85, 2.55, 2.65};
+                        
+                                System.out.printf("%-30s %s%n", "Bank", "Interest Rate (%)");
+                                System.out.println("------------------------------------------------");
+                       
+                                for (int i = 0; i < banks.length; i++) {
+                                System.out.printf("%-30s %6.2f%n", banks[i], INTEREST[i]);}
+                                           
+                                System.out.println("------------------------------------------------");
+                                
                                 String input = JOptionPane.showInputDialog("Enter bank interest rate (%): ");
                     
                                 if (input == null) { 
