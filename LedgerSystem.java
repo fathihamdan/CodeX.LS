@@ -15,8 +15,8 @@ import java.util.InputMismatchException;
 
 public class LedgerSystem {
 
-
     public static void main(String[] args) {
+        
         Scanner sc=new Scanner(System.in);
         LocalDate CurrentDate = LocalDate.now();
         
@@ -41,12 +41,14 @@ public class LedgerSystem {
 
 
             //kalau user tekan Login button LogReg=0, kalau user tekan Register button LogReg=1
+            
+            //register
             if (LogReg==1){
 
                 regName=JOptionPane.showInputDialog("Name: ");
 
                 if(regName==null){
-                    continue;
+                    System.exit(0);
                 }
 
                 while(true){
@@ -54,7 +56,7 @@ public class LedgerSystem {
                     regEmail=JOptionPane.showInputDialog("Email: ");
 
                     if(regEmail==null){
-                        continue;
+                        System.exit(0);
                     }
                 
                     if(regEmail.endsWith("@gmail.com")){
@@ -85,7 +87,7 @@ public class LedgerSystem {
                     regPass=JOptionPane.showInputDialog("Password: ");
 
                     if(regPass == null){
-                        continue;
+                        System.exit(0);
                     }
                     
                     if (regPass.length()<8){
@@ -154,11 +156,11 @@ public class LedgerSystem {
                 while(!exitLoop){
                     String email=JOptionPane.showInputDialog("Email: ");
                     if(email==null){
-                        continue;
+                        System.exit(0);
                     }
                     String pass=JOptionPane.showInputDialog("Password: ");
                     if(pass==null){
-                        continue;
+                        System.exit(0);
                     }
                     
 
@@ -695,5 +697,8 @@ public class LedgerSystem {
             return amount;
         }
     }
+
+
+
 }
 
