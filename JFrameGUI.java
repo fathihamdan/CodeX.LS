@@ -16,7 +16,7 @@ public class JFrameGUI extends LedgerSystem{
 
 
         JButton button1 = new JButton();
-        button1.setBounds(50,50,100,50);
+        button1.setBounds(50,50,80,25);
         button1.addActionListener(e -> System.out.println("button 1"));
         button1.setText("Button 1");
 
