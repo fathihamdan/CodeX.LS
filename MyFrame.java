@@ -52,6 +52,8 @@ history.add(OK);
 
 history.setVisible(true);
 
+int LogReg=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,icon,new String[]{"Login","Register"},"Login");
+
 // JLabel label = new JLabel();
 // label.setText("HISTORY");
 // label.setBounds(0, 10, 400, 40);

@@ -387,34 +387,38 @@ public class LedgerSystem {
                                     break;
                                 }
                             
-                            while(true){
-
-
-
-                                DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog("Enter debit amount: "));
-
-                                if(DebitCredit[count]>1000000000){
-                                    JOptionPane.showMessageDialog(null,"The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                                }
-                                else if(DebitCredit[count]<0){
-                                    JOptionPane.showInputDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);    
-                                }
-                                else{
-
-                                    //if savings was activated on option 4, these lines of code will run
-                                    if(SavingActivated){
-                                        double savedMoney = (SavingPercent/100)*DebitCredit[count];
-                                        DebitCredit[count]= DebitCredit[count]-savedMoney;
-                                        savings+=savedMoney;
-                                        
+                            while (true) {
+                                try {
+                                    String input = JOptionPane.showInputDialog("Enter debit amount: ");
+                                    if (input == null) { // Handle cancellation
+                                        JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                        break;
                                     }
-
+                            
+                                    DebitCredit[count] = Double.parseDouble(input); // Attempt to parse the input
+                            
+                                    if (DebitCredit[count] > 1000000000) {
+                                        JOptionPane.showMessageDialog(null, "The amount exceeded 10 digits. Please try again.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                    } else if (DebitCredit[count] < 0) {
+                                        JOptionPane.showMessageDialog(null, "Please insert positive values only.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                    } else {
+                                        
+                                        if (SavingActivated) {
+                                            double savedMoney = (SavingPercent / 100) * DebitCredit[count];
+                                            DebitCredit[count] = DebitCredit[count] - savedMoney;
+                                            savings += savedMoney;
+                                        }
+                            
+                                        CurrentBalance[count] = balance + DebitCredit[count];
+                                        balance += DebitCredit[count];
+                                        break; 
+                                    }
+                                } catch (NumberFormatException e) {
                                     
-                                    CurrentBalance[count]=balance+DebitCredit[count];
-                                    balance+=DebitCredit[count];
-                                    break;
+                                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
+                                
 
                             while(true){
                                 
@@ -442,22 +446,32 @@ public class LedgerSystem {
                                     break;
                                 }
                             
-                            while(true){
-
-                                DebitCredit[count]=Double.parseDouble(JOptionPane.showInputDialog(null,"Enter credit amount: ","Ledger System",JOptionPane.INFORMATION_MESSAGE));
-
-                                if(DebitCredit[count]>1000000000){
-                                    JOptionPane.showMessageDialog(null, "The amount exceeded 10 digits. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                                }
-                                else if(DebitCredit[count]<0){
-                                    JOptionPane.showMessageDialog(null,"Please insert positive value only.","Ledger System",JOptionPane.WARNING_MESSAGE);
-                                }
-                                else{
-                                    CurrentBalance[count]=balance-DebitCredit[count];
-                                    balance-=DebitCredit[count];
-                                    break;
+                            while (true) {
+                                try {
+                                    String input = JOptionPane.showInputDialog(null, "Enter credit amount: ", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                            
+                                    if (input == null) { 
+                                        JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                        break;
+                                    }
+                            
+                                    DebitCredit[count] = Double.parseDouble(input); 
+                            
+                                    if (DebitCredit[count] > 1000000000) {
+                                        JOptionPane.showMessageDialog(null, "The amount exceeded 10 digits. Please try again.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                    } else if (DebitCredit[count] < 0) {
+                                        JOptionPane.showMessageDialog(null, "Please insert positive value only.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                    } else {
+                                        CurrentBalance[count] = balance - DebitCredit[count];
+                                        balance -= DebitCredit[count];
+                                        break; 
+                                    }
+                                } catch (NumberFormatException e) {
+                                    
+                                    JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
+                                
 
                             while(true){
 
@@ -483,66 +497,141 @@ public class LedgerSystem {
                             break;
                         
                         case 3:
-                            System.out.println("== Savings ==");
                             if(SavingActivated == false){
-                                System.out.print("Are you sure you want to activate it? (Y/N) : ");
-                                String YesNo = sc.next();
-                                sc.nextLine();
-                                if(YesNo.equalsIgnoreCase("Y")){
-                                    SavingActivated = true;
-                                    System.out.print("Please enter the percentage you wish to deduct from your next debit: ");
-                                    SavingPercent = sc.nextDouble();
-                                    sc.nextLine();
-                                    System.out.println(SavingPercent+"% will be auto deduct from your next debit.");
-                                    System.out.println("Savings settings added successfully!!!");
-                                    SavingActivated = true;
+                                int YN = JOptionPane.showOptionDialog(null,"Are you sure you want to activate it? (Y/N) : ","Ledger System",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Yes","No"},"Yes");
+                                if(YN == 0){
+                                    
+                                    while (true) {
+                                        try {
+                                            String input = JOptionPane.showInputDialog("Please enter the percentage you wish to deduct from your next debit:");
+                                    
+                                            if (input == null) { // Handle cancellation
+                                                JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                                break;
+                                            }
+                                    
+                                            SavingPercent = Double.parseDouble(input); // Attempt to parse the input
+                                    
+                                            if (SavingPercent < 0 || SavingPercent > 100) {
+                                                JOptionPane.showMessageDialog(null, "Please enter a valid percentage between 0 and 100.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, "Savings settings added successfully!!!\n" + SavingPercent + "% will be auto-deducted from your next debit.");
+                                                SavingActivated = true;
+                                                break; // Exit loop after successful input and processing
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+                                    
                                     break;
                                 } 
-                                else if(YesNo.equalsIgnoreCase("N")){
+                                else if(YN == 1){
                                     SavingActivated = false;
                                     break;
                                 }
-                                else{
-                                    System.out.println("Wrong input sucker!");
+                                else if(YN==-1){
+                                    
                                     break;
                                 }
                             }
                             else if(SavingActivated == true){
-                                System.out.println("You have already activated Savings.");
-                                System.out.println("Current saving percentage: "+SavingPercent);
-                                System.out.println("Would you like to deactivate it?");
-                                String YN = sc.nextLine();
-                                sc.nextLine();
-                                if(YN.equalsIgnoreCase("Y")){
+                                int YN = JOptionPane.showOptionDialog(null,"You have already activated Savings.\nCurrent saving percentage: "+SavingPercent+"\nWould you like to deactivate it?","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Yes","No"},"Yes");
+                                if(YN==0){
                                     SavingActivated = false;
                                     SavingPercent = 0.0;
                                     System.out.println("Saving deactivated successfully");
                                     break;
                                 }
-                                else if(YN.equalsIgnoreCase("N")){
+                                else if(YN==1){
                                     break;
                                 }
-                                else{
-                                    System.out.println("Wrong input sucker!");
+                                else if(YN==-1){
+                                    break;
                                 }
                             }
                             break;
                         
                         case 4:
-                            System.out.println("\n== Credit Loan ==");
-                            System.out.println("1. Apply");
-                            System.out.println("2. Repay");
-                            System.out.print("\n>");
-                            int choice = sc.nextInt();
-                            sc.nextLine();                        
+
+                            int choice = JOptionPane.showOptionDialog(null,"Credit Loan","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Apply","Repay"},"Apply");
+                    
                             
-                            if(choice == 1){ //apply loan
-                                System.out.print("Enter the total amount of money you want to take a loan: ");
-                                double P = validatepositiveinput(sc); // principal
-                                System.out.print("Enter the interest rate(%): ");
-                                double InterestRate = validatepositiveinput(sc);
-                                System.out.print("Enter the repayment period (in months): ");
-                                repaymentPeriod = (int) validatepositiveinput(sc);
+                            if(choice == 0){ 
+                                double P = 0;
+
+                                while (true) {
+                                    try {
+                                        String input = JOptionPane.showInputDialog("Enter the total amount of money you want to take a loan:");
+
+                                        if (input == null) { 
+                                            JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                            break;
+                                        }
+
+                                        P = Double.parseDouble(input); // Attempt to parse the input
+
+                                        if (P <= 0) {
+                                            JOptionPane.showMessageDialog(null, "Please enter a positive loan amount.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, String.format("Loan amount entered: %.2f", P), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                            break; // Exit loop after successful input and validation
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }
+
+
+                                double InterestRate = 0;
+
+                                while (true) {
+                                    try {
+                                        String input = JOptionPane.showInputDialog("Enter the interest rate (%): ");
+
+                                        if (input == null) { // Handle cancellation
+                                            JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                            break;
+                                        }
+
+                                        InterestRate = Double.parseDouble(input); // Attempt to parse the input
+
+                                        if (InterestRate < 0) { // Check for negative numbers
+                                            JOptionPane.showMessageDialog(null, "Please enter a positive interest rate.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, String.format("Interest rate entered: %.2f%%", InterestRate), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                            break; // Exit loop after valid input
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }
+
+                                
+                                
+
+                                while (true) {
+                                    try {
+                                        String input = JOptionPane.showInputDialog("Enter the repayment period (in months):");
+
+                                        if (input == null) { // Handle cancellation
+                                            JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                            break;
+                                        }
+
+                                        repaymentPeriod = Integer.parseInt(input); // Attempt to parse the input
+
+                                        if (repaymentPeriod <= 0) { // Check for non-positive values
+                                            JOptionPane.showMessageDialog(null, "Please enter a positive number of months.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, String.format("Repayment period set to %d months.", repaymentPeriod), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                            break; // Exit loop after valid input
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                }
+
                                 
                                 loanStartDate = CurrentDate;
                                 
@@ -552,48 +641,86 @@ public class LedgerSystem {
                                 monthlyRepayment = Math.round((totalrepayment/repaymentPeriod)*100.0) / 100.0;
                                 monthsPaid = 0;
                                 
-                                System.out.println("\nYour loan has been authorized!");
-                                System.out.printf("Total repayment amount: %.2f\n",totalrepayment);
-                                System.out.printf("Monthly repayment : %.2f\n", monthlyRepayment );                                                                                                                
                                 
-                            }else if(choice ==2){ //repay loan
+                                JOptionPane.showMessageDialog(null,"Your loan has been authorized!"+String.format("\nTotal repayment amount: %.2f",totalrepayment)+String.format("Monthly repayment : %.2f\n", monthlyRepayment ));
+                                
+                            }else if(choice ==1){ //repay loan
                                 if(loan >0){
-                                    System.out.printf("Monthly repayment: %.2f\n",monthlyRepayment);
-                                    System.out.print("Enter the amount you want to repay :");
-                                    double repayment = validatepositiveinput(sc);
+
+                                    double repayment = 0;
+
+                                    while (true) {
+                                        try {
+                                            String input = JOptionPane.showInputDialog(String.format("Monthly repayment : %.2f\nEnter the amount you want to repay", monthlyRepayment));
+
+                                            if (input == null) { // Handle cancellation
+                                                JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                                break;
+                                            }
+
+                                            repayment = Double.parseDouble(input); // Try parsing the input to a double
+
+                                            if (repayment <= 0) { // Check for invalid (non-positive) repayment
+                                                JOptionPane.showMessageDialog(null, "Please enter a positive repayment amount.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, String.format("Repayment amount set to: %.2f", repayment), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                                break; // Exit loop after valid input
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }
+
                                     
                                     if(repayment == monthlyRepayment){
                                         loan -= repayment;
                                         loan = Math.max(loan,0.0); //to make sure loan doesn't go negative
                                         monthsPaid++;
                                         
-                                        System.out.printf("Repayment successful!! Remaining loan balance : %.2f\n", loan);
+                                        JOptionPane.showMessageDialog(null,String.format("Repayment successful!! Remaining loan balance : %.2f\n", loan));
                                         
                                         if(loan==0){
-                                            System.out.println("Congratulations! Your loan has been fully repaid");
+                                            JOptionPane.showMessageDialog(null,"Congratulations! Your loan has been fully repaid");
                                         }
                                         
                                     }else if(repayment < monthlyRepayment){
-                                        System.out.println("Insufficient repayment. Please pay the exact monthly repayment amount.");                                        
+                                        JOptionPane.showMessageDialog(null,"Insufficient repayment. Please pay the exact monthly repayment amount.");                                        
                                     }else{
-                                        System.out.println("Overpayment is not allowed. Please pay the exact monthly repayment amount.");           
+                                        JOptionPane.showMessageDialog(null,"Overpayment is not allowed. Please pay the exact monthly repayment amount.");           
                                         }
                                     
                                 }else{
-                                    System.out.println("No active loan to repay");
+                                    JOptionPane.showMessageDialog(null,"No active loan to repay");
                                 }
                             }
-                            System.out.println();
                             break;
                         
                         case 5:
-                            System.out.println("\n== Deposit Interest Predictor ==");                       
-                            System.out.print("Enter bank interest rate(%): ");
-                            double rate = validatepositiveinput(sc);                       
-                            
-                            double interest = (balance*(rate/100))/12;
-                            System.out.printf("Predicted interest monthly: %.2f\n", interest);
-                            break;
+                        while (true) {
+                            try {
+                                String input = JOptionPane.showInputDialog("Enter bank interest rate (%): ");
+                    
+                                if (input == null) { 
+                                    JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                    break;
+                                }
+                    
+                                double rate = Double.parseDouble(input); 
+                    
+                                if (rate < 0) {
+                                    JOptionPane.showMessageDialog(null, "Please enter a positive interest rate.", "Ledger System", JOptionPane.WARNING_MESSAGE);
+                                } else {
+                                    double interest = (balance * (rate / 100)) / 12;
+                                    JOptionPane.showMessageDialog(null, String.format("Predicted interest monthly: %.2f", interest));
+                                    break; 
+                                }
+                            } catch (NumberFormatException e) {
+                                
+                                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                        break;
+                        
 
                         //logout
                         case 6:
