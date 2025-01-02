@@ -420,6 +420,8 @@ public class LedgerSystem {
                                 
                                 descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                                 descDebitCredit[1][count]="Debit";
+
+                                transactionDates[count] = LocalDate.now();
                                 
                                 if(descDebitCredit[0][count].length()>20){
                                     JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
@@ -461,6 +463,7 @@ public class LedgerSystem {
 
                                 descDebitCredit[0][count]=JOptionPane.showInputDialog(null,"Enter description: ","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                                 descDebitCredit[1][count]="Credit";
+                                transactionDates[count] = LocalDate.now();
 
                                 if(descDebitCredit[0][count].length()>20){
                                     JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
@@ -788,11 +791,71 @@ public class LedgerSystem {
                 }
     
                 // Display filtered or sorted transactions
-                JOptionPane.showMessageDialog(null,String.format("%-10s%-20s%-20s%-15s%-15s\n", "No.", "Date", "Description", "Amount", "Type"));
-                for (int i = 0; i < transactions.size(); i++) {
+
+                String[][] data = new String[5][100];
+                for (int i = 0; i < count; i++) {
                     Transaction t = transactions.get(i);
-                    JOptionPane.showMessageDialog(null,String.format("%-10d%-20s%-20s%-15.2f%-15s\n", (i + 1), t.date, t.description, t.amount, t.type));
+                    data[i][0]=String.format("%d",i+1);
+                    data[i][1]=String.format("%s",t.date);
+                    data[i][2]=t.description;
+                    data[i][3]=String.format("%f",t.amount);
+                    data[i][4]=t.type;
                 }
+                
+                JFrame history = new JFrame("Ledger System");
+                history.setTitle("Ledger System");
+                history.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                history.setSize(800, 500);
+                history.setResizable(false);
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                int x = ((screenSize.width - history.getWidth()) / 2);
+                history.setLocation(x,200);
+                history.setLayout(null);
+
+                JLabel label = new JLabel();
+                label.setText("HISTORY");
+                label.setBounds(2, 0, 800, 40);
+                label.setFont(new Font("Arial", Font.BOLD, 15)); 
+                label.setHorizontalAlignment(JLabel.CENTER);
+
+
+                String[] column = {"No.", "Date", "Description", "Amount", "Type"};
+
+                JTable table = new JTable(data, column);
+
+                JScrollPane scp = new JScrollPane(table);
+                scp.setBounds(45,50,700,350);
+
+
+                int []option ={100};
+                JButton OK = new JButton("OK");
+                OK.setBounds(350, 420, 100, 30); 
+                OK.setBorder(BorderFactory.createEtchedBorder());
+
+                OK.setFocusable(false);
+                OK.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        option[0] = 6;
+                        history.dispose();
+                    }
+                });
+
+                history.add(scp);
+                history.add(label);
+                history.add(OK);
+
+                history.setVisible(true);
+
+                while (option[0] == 100) {
+                    try {
+                        Thread.sleep(100); 
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                break;
+                
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
                 sc.nextLine(); // Clear the invalid input
