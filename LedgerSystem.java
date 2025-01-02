@@ -569,13 +569,13 @@ public class LedgerSystem {
                                             break;
                                         }
 
-                                        P = Double.parseDouble(input); // Attempt to parse the input
+                                        P = Double.parseDouble(input); 
 
                                         if (P <= 0) {
                                             JOptionPane.showMessageDialog(null, "Please enter a positive loan amount.", "Ledger System", JOptionPane.WARNING_MESSAGE);
                                         } else {
                                             JOptionPane.showMessageDialog(null, String.format("Loan amount entered: %.2f", P), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
-                                            break; // Exit loop after successful input and validation
+                                            break; 
                                         }
                                     } catch (NumberFormatException e) {
                                         JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
@@ -589,18 +589,18 @@ public class LedgerSystem {
                                     try {
                                         String input = JOptionPane.showInputDialog("Enter the interest rate (%): ");
 
-                                        if (input == null) { // Handle cancellation
+                                        if (input == null) { 
                                             JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
                                             break;
                                         }
 
-                                        InterestRate = Double.parseDouble(input); // Attempt to parse the input
+                                        InterestRate = Double.parseDouble(input); 
 
-                                        if (InterestRate < 0) { // Check for negative numbers
+                                        if (InterestRate < 0) { 
                                             JOptionPane.showMessageDialog(null, "Please enter a positive interest rate.", "Ledger System", JOptionPane.WARNING_MESSAGE);
                                         } else {
                                             JOptionPane.showMessageDialog(null, String.format("Interest rate entered: %.2f%%", InterestRate), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
-                                            break; // Exit loop after valid input
+                                            break; 
                                         }
                                     } catch (NumberFormatException e) {
                                         JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
@@ -614,18 +614,18 @@ public class LedgerSystem {
                                     try {
                                         String input = JOptionPane.showInputDialog("Enter the repayment period (in months):");
 
-                                        if (input == null) { // Handle cancellation
+                                        if (input == null) { 
                                             JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
                                             break;
                                         }
 
-                                        repaymentPeriod = Integer.parseInt(input); // Attempt to parse the input
+                                        repaymentPeriod = Integer.parseInt(input); 
 
-                                        if (repaymentPeriod <= 0) { // Check for non-positive values
+                                        if (repaymentPeriod <= 0) { 
                                             JOptionPane.showMessageDialog(null, "Please enter a positive number of months.", "Ledger System", JOptionPane.WARNING_MESSAGE);
                                         } else {
                                             JOptionPane.showMessageDialog(null, String.format("Repayment period set to %d months.", repaymentPeriod), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
-                                            break; // Exit loop after valid input
+                                            break; 
                                         }
                                     } catch (NumberFormatException e) {
                                         JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
@@ -642,7 +642,7 @@ public class LedgerSystem {
                                 monthsPaid = 0;
                                 
                                 
-                                JOptionPane.showMessageDialog(null,"Your loan has been authorized!"+String.format("\nTotal repayment amount: %.2f",totalrepayment)+String.format("Monthly repayment : %.2f\n", monthlyRepayment ));
+                                JOptionPane.showMessageDialog(null,"Your loan has been authorized!"+String.format("\nTotal repayment amount: %.2f",totalrepayment)+String.format("\nMonthly repayment : %.2f\n", monthlyRepayment ));
                                 
                             }else if(choice ==1){ //repay loan
                                 if(loan >0){
@@ -653,18 +653,18 @@ public class LedgerSystem {
                                         try {
                                             String input = JOptionPane.showInputDialog(String.format("Monthly repayment : %.2f\nEnter the amount you want to repay", monthlyRepayment));
 
-                                            if (input == null) { // Handle cancellation
+                                            if (input == null) { 
                                                 JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
                                                 break;
                                             }
 
-                                            repayment = Double.parseDouble(input); // Try parsing the input to a double
+                                            repayment = Double.parseDouble(input); 
 
-                                            if (repayment <= 0) { // Check for invalid (non-positive) repayment
+                                            if (repayment <= 0) { 
                                                 JOptionPane.showMessageDialog(null, "Please enter a positive repayment amount.", "Ledger System", JOptionPane.WARNING_MESSAGE);
                                             } else {
-                                                JOptionPane.showMessageDialog(null, String.format("Repayment amount set to: %.2f", repayment), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
-                                                break; // Exit loop after valid input
+                                                JOptionPane.showMessageDialog(null, String.format("Repayment amount: %.2f", repayment), "Ledger System", JOptionPane.INFORMATION_MESSAGE);
+                                                break; 
                                             }
                                         } catch (NumberFormatException e) {
                                             JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.", "Ledger System", JOptionPane.ERROR_MESSAGE);
@@ -925,7 +925,7 @@ public class LedgerSystem {
                     data[i][0]=String.format("%d",i+1);
                     data[i][1]=String.format("%s",t.date);
                     data[i][2]=t.description;
-                    data[i][3]=String.format("%f",t.amount);
+                    data[i][3]=String.format("%.2f",t.amount);
                     data[i][4]=t.type;
                 }
                 
@@ -966,6 +966,9 @@ public class LedgerSystem {
                         history.dispose();
                     }
                 });
+
+                ImageIcon image = new ImageIcon("icon1.png");
+                history.setIconImage(image.getImage());
 
                 history.add(scp);
                 history.add(label);
