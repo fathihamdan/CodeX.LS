@@ -34,12 +34,13 @@ public class LedgerSystem {
         int repaymentPeriod =0;
         Double loan = 0.0;
         int monthsPaid =0;
-
+        boolean exitRegistration = false;
         
 
         boolean LedgerSystemRunning = true;
         
         while(LedgerSystemRunning){
+            while(!exitRegistration){
             
             ImageIcon icon = new ImageIcon("icon1.png");
             int LogReg=JOptionPane.showOptionDialog(null,"Welcome to Ledger System!","Ledger System",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE,icon,new String[]{"Login","Register"},"Login");
@@ -48,174 +49,177 @@ public class LedgerSystem {
             //kalau user tekan Login button LogReg=0, kalau user tekan Register button LogReg=1
             
             //register
-            if (LogReg==1){
+                if (LogReg==1){
 
-                regName=JOptionPane.showInputDialog("Name: ");
+                    regName=JOptionPane.showInputDialog("Name: ");
 
-                if(regName==null){
-                    System.exit(0);
-                }
-
-                while(true){
-                    
-                    regEmail=JOptionPane.showInputDialog("Email: ");
-
-                    if(regEmail==null){
+                    if(regName==null){
                         System.exit(0);
                     }
-                
-                    if(regEmail.endsWith("@gmail.com")){
-                        regEmailValid=regEmail;
-                        break;
-                    }
-                    else if(regEmail.endsWith("@hotmail.com")){
-                        regEmailValid=regEmail;
-                        break;
-                    }
-                    else if(regEmail.endsWith("@yahoo.com")){
-                        regEmailValid=regEmail;
-                        break;
-                    }
-                    else if(regEmail.endsWith("@outlook.com")){
-                        regEmailValid=regEmail;
-                        break;
-                    }
-                    
-                    else{
 
-                        JOptionPane.showMessageDialog(null, "Email must be in correct format(name@gmail.com)","Ledger System",JOptionPane.WARNING_MESSAGE);
-                    }
-                } 
-                
-                while(true){
-                    
-                    regPass=JOptionPane.showInputDialog("Password: ");
-
-                    if(regPass == null){
-                        System.exit(0);
-                    }
-                    
-                    if (regPass.length()<8){
-                        JOptionPane.showMessageDialog(null,"\nPassword must be at least 8 characters.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
-                    }
-                    
-                    boolean letter=false;
-                    boolean digit=false;
-                    boolean spec=false;
-                    boolean moreThan8Characters=false;
-                    
-                    for(int i=0; i<regPass.length(); i++){
-                        char charac=regPass.charAt(i);
+                    while(true){
                         
-                        if (Character.isLetter(charac))
-                            letter=true;
-                        else if (Character.isDigit(charac))
-                            digit=true;
-                        else if (!Character.isLetterOrDigit(charac))
-                            spec=true;
-                    }
-                    
-                    if(regPass.length()>=8){
-                        moreThan8Characters=true;
-                    }
-                    
-                    
-                    if(!letter){
-                        JOptionPane.showMessageDialog(null,"\nPassword must contain at least one letter.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
-                    }
-                    else if(!digit){
-                        JOptionPane.showMessageDialog(null,"\nPassword must contain at least one digit.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
-                    }
-                    else if(!spec){
-                        JOptionPane.showMessageDialog(null,"\nPassword must contain at least one special character.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
-                    }
-                    else if(!moreThan8Characters){
-                        JOptionPane.showMessageDialog(null,"\nPassword must be at least 8 characters.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
-                    
-                    }
-                    else {
-                        
-                        regPassValid=regPass;
-                        String hashedPass = hashPassword(regPassValid);
+                        regEmail=JOptionPane.showInputDialog("Email: ");
 
-                        try (FileWriter writer = new FileWriter("user.csv", true)) {
-                            writer.append(regName+","+regEmailValid+","+hashedPass+"\n");
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if(regEmail==null){
+                            System.exit(0);
                         }
-
-
-                        JOptionPane.showMessageDialog(null,"\nRegister succesful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                    
+                        if(regEmail.endsWith("@gmail.com")){
+                            regEmailValid=regEmail;
+                            break;
+                        }
+                        else if(regEmail.endsWith("@hotmail.com")){
+                            regEmailValid=regEmail;
+                            break;
+                        }
+                        else if(regEmail.endsWith("@yahoo.com")){
+                            regEmailValid=regEmail;
+                            break;
+                        }
+                        else if(regEmail.endsWith("@outlook.com")){
+                            regEmailValid=regEmail;
+                            break;
+                        }
                         
-                        break;
-                    }
+                        else{
+
+                            JOptionPane.showMessageDialog(null, "Email must be in correct format(name@gmail.com)","Ledger System",JOptionPane.WARNING_MESSAGE);
+                        }
+                    } 
                     
-                }
-                
-            }
-            
-            else if (LogReg==0){
+                    while(true){
+                        
+                        regPass=JOptionPane.showInputDialog("Password: ");
 
+                        if(regPass == null){
+                            System.exit(0);
+                        }
+                        
+                        if (regPass.length()<8){
+                            JOptionPane.showMessageDialog(null,"\nPassword must be at least 8 characters.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                        }
+                        
+                        boolean letter=false;
+                        boolean digit=false;
+                        boolean spec=false;
+                        boolean moreThan8Characters=false;
+                        
+                        for(int i=0; i<regPass.length(); i++){
+                            char charac=regPass.charAt(i);
+                            
+                            if (Character.isLetter(charac))
+                                letter=true;
+                            else if (Character.isDigit(charac))
+                                digit=true;
+                            else if (!Character.isLetterOrDigit(charac))
+                                spec=true;
+                        }
+                        
+                        if(regPass.length()>=8){
+                            moreThan8Characters=true;
+                        }
+                        
+                        
+                        if(!letter){
+                            JOptionPane.showMessageDialog(null,"\nPassword must contain at least one letter.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                        }
+                        else if(!digit){
+                            JOptionPane.showMessageDialog(null,"\nPassword must contain at least one digit.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                        }
+                        else if(!spec){
+                            JOptionPane.showMessageDialog(null,"\nPassword must contain at least one special character.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                        }
+                        else if(!moreThan8Characters){
+                            JOptionPane.showMessageDialog(null,"\nPassword must be at least 8 characters.\n","Ledger System",JOptionPane.WARNING_MESSAGE);
+                        
+                        }
+                        else {
+                            
+                            regPassValid=regPass;
+                            String hashedPass = hashPassword(regPassValid);
 
-                boolean exitLoop=false;
-                while(!exitLoop){
-                    String email=JOptionPane.showInputDialog("Email: ");
-                    if(email==null){
-                        System.exit(0);
-                    }
-                    String pass=JOptionPane.showInputDialog("Password: ");
-                    if(pass==null){
-                        System.exit(0);
-                    }
-                    
-
-                    try (BufferedReader reader = new BufferedReader(new FileReader("user.csv"))) {
-                        String line;
-                        boolean found = false;
-            
-                        while ((line = reader.readLine()) != null) {
-                            String[] parts = line.split(",");
-                            if (parts[1].equalsIgnoreCase(email)&&verifyPassword(pass, parts[2])) {
-                                JOptionPane.showMessageDialog(null,"\nLogin Successful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
-                                regName=parts[0];
-                                regEmail=parts[1];
-                                found = true;
-
-                                //reminder for loan repayment
-                                if(loan >0 && loanStartDate != null && !HasPaidThisMonth(loanStartDate, repaymentPeriod, monthsPaid)){
-                                    LocalDate dueDate = loanStartDate.plusMonths(repaymentPeriod);
-                                    long DaysUntilDue = ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
-                                    
-                                    System.out.printf("REMINDER!! Your loan repayment is due in %d days (Due Date: %s).\nPlease pay your monthly repayment.", DaysUntilDue,dueDate);
-                                }
-
-                                exitLoop=true;
-                                
-                                break;
+                            try (FileWriter writer = new FileWriter("user.csv", true)) {
+                                writer.append(regName+","+regEmailValid+","+hashedPass+"\n");
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        }
-            
-                        if (!found) {
-                            JOptionPane.showMessageDialog(null,"\nYour email or password is wrong. Please try again","Ledger System",JOptionPane.WARNING_MESSAGE);
-                        }
-                    } catch (FileNotFoundException e) {
-                        System.out.println("The file does not exist. Please add data first.");
-                    } catch (IOException e) {
-                        System.out.println("An error occurred while reading the file: " + e.getMessage());
-                    }
 
+
+                            JOptionPane.showMessageDialog(null,"\nRegister succesful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                            
+                            break;
+                        }
+                        
+                    }
+                    
                 }
                 
-            }
-            else if(LogReg==-1){
-                LedgerSystemRunning = false;
-                break;
-            }
-            else{
-                System.out.println("\nPlease choose between 1 or 2 only.");
-                System.out.println(LogReg);
-            }
-            
+
+                //login
+                else if (LogReg==0){
+
+
+                    boolean exitLoop=false;
+                    while(!exitLoop){
+                        String email=JOptionPane.showInputDialog("Email: ");
+                        if(email==null){
+                            System.exit(0);
+                        }
+                        String pass=JOptionPane.showInputDialog("Password: ");
+                        if(pass==null){
+                            System.exit(0);
+                        }
+                        
+
+                        try (BufferedReader reader = new BufferedReader(new FileReader("user.csv"))) {
+                            String line;
+                            boolean found = false;
+                
+                            while ((line = reader.readLine()) != null) {
+                                String[] parts = line.split(",");
+                                if (parts[1].equalsIgnoreCase(email)&&verifyPassword(pass, parts[2])) {
+                                    JOptionPane.showMessageDialog(null,"\nLogin Successful!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                                    regName=parts[0];
+                                    regEmail=parts[1];
+                                    found = true;
+
+                                    //reminder for loan repayment
+                                    if(loan >0 && loanStartDate != null && !HasPaidThisMonth(loanStartDate, repaymentPeriod, monthsPaid)){
+                                        LocalDate dueDate = loanStartDate.plusMonths(repaymentPeriod);
+                                        long DaysUntilDue = ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
+                                        
+                                        System.out.printf("REMINDER!! Your loan repayment is due in %d days (Due Date: %s).\nPlease pay your monthly repayment.", DaysUntilDue,dueDate);
+                                    }
+
+                                    exitLoop=true;
+                                    exitRegistration = true;
+                                    
+                                    break;
+                                }
+                            }
+                
+                            if (!found) {
+                                JOptionPane.showMessageDialog(null,"\nYour email or password is wrong. Please try again","Ledger System",JOptionPane.WARNING_MESSAGE);
+                            }
+                        } catch (FileNotFoundException e) {
+                            System.out.println("The file does not exist. Please add data first.");
+                        } catch (IOException e) {
+                            System.out.println("An error occurred while reading the file: " + e.getMessage());
+                        }
+
+                    }
+                    
+                }
+                else if(LogReg==-1){
+                    LedgerSystemRunning = false;
+                    break;
+                }
+                else{
+                    System.out.println("\nPlease choose between 1 or 2 only.");
+                    System.out.println(LogReg);
+                }
+        }
 
             //Aqil&&Fathi
             
