@@ -70,36 +70,68 @@ public class LedgerSystem {
                             JOptionPane.showMessageDialog(null, "Name must contain alphanumeric characters only.");
                         }   
                     }
-
-                    while(true){
+                    boolean exitLoop=false;
+                    while(!exitLoop){
                         
                         regEmail=JOptionPane.showInputDialog("Email: ");
 
                         if(regEmail==null){
                             System.exit(0);
                         }
-                    
-                        if(regEmail.endsWith("@gmail.com")){
-                            regEmailValid=regEmail;
-                            break;
-                        }
-                        else if(regEmail.endsWith("@hotmail.com")){
-                            regEmailValid=regEmail;
-                            break;
-                        }
-                        else if(regEmail.endsWith("@yahoo.com")){
-                            regEmailValid=regEmail;
-                            break;
-                        }
-                        else if(regEmail.endsWith("@outlook.com")){
-                            regEmailValid=regEmail;
-                            break;
-                        }
-                        
-                        else{
 
-                            JOptionPane.showMessageDialog(null, "Email must be in correct format(name@gmail.com)","Ledger System",JOptionPane.WARNING_MESSAGE);
+                        try (BufferedReader reader = new BufferedReader(new FileReader("user.csv"))) {
+                            String line;
+                            boolean found = false;
+                
+                            while ((line = reader.readLine()) != null) {
+                                String[] parts = line.split(",");
+                                if (parts[1].equalsIgnoreCase(regEmail)) {
+                                    JOptionPane.showMessageDialog(null,"\nThis account has been registered.\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                                    
+                                    found = true;
+
+                                    //reminder for loan repayment
+                                    
+
+                                    
+                                    
+                                    
+                                    break;
+                                }
+                            }
+                
+                            if (!found) {
+                                
+                                if(regEmail.endsWith("@gmail.com")){
+                                    regEmailValid=regEmail;
+                                    break;
+                                }
+                                else if(regEmail.endsWith("@hotmail.com")){
+                                    regEmailValid=regEmail;
+                                    break;
+                                }
+                                else if(regEmail.endsWith("@yahoo.com")){
+                                    regEmailValid=regEmail;
+                                    break;
+                                }
+                                else if(regEmail.endsWith("@outlook.com")){
+                                    regEmailValid=regEmail;
+                                    break;
+                                }
+                                
+                                else{
+        
+                                    JOptionPane.showMessageDialog(null, "Email must be in correct format(name@gmail.com)","Ledger System",JOptionPane.WARNING_MESSAGE);
+                                }
+
+                            }
+                        } catch (FileNotFoundException e) {
+                            System.out.println("The file does not exist. Please add data first.");
+                        } catch (IOException e) {
+                            System.out.println("An error occurred while reading the file: " + e.getMessage());
                         }
+                    
+                        
                     } 
                     
                     while(true){
@@ -178,10 +210,44 @@ public class LedgerSystem {
                         if(email==null){
                             System.exit(0);
                         }
-                        String pass=JOptionPane.showInputDialog("Password: ");
-                        if(pass==null){
+
+                        JPasswordField passwordField = new JPasswordField();
+                        JPanel panel = new JPanel(new GridLayout(0, 1));
+                        panel.add(new JLabel("Password:"));
+                        panel.add(passwordField);
+                        
+
+                        JOptionPane optionPane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+                        JDialog dialog = optionPane.createDialog("Login");
+
+                        dialog.setIconImage(new ImageIcon("Slide1.PNG").getImage());  
+
+                        
+                        
+
+                        dialog.addWindowFocusListener(new WindowAdapter() {
+                            @Override
+                            public void windowGainedFocus(WindowEvent e) {
+                                passwordField.requestFocusInWindow();
+                            }
+                        });
+
+                        dialog.setVisible(true);
+
+                        Object selectedValue = optionPane.getValue();
+                        if(selectedValue == null){
                             System.exit(0);
                         }
+
+                        int option = (int)selectedValue;
+                        String pass = "";
+                        if(option == JOptionPane.OK_OPTION){
+                            pass=new String(passwordField.getPassword());
+                        }else{
+                            System.exit(0);
+                            
+                        }
+
                         
 
                         try (BufferedReader reader = new BufferedReader(new FileReader("user.csv"))) {
