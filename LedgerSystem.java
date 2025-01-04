@@ -710,30 +710,147 @@ public class LedgerSystem {
                         while (true) {
                             try {
 
+                                double[] rate = {0};
+                                ImageIcon maybank = new ImageIcon("maybank.png");
+                                ImageIcon rhb = new ImageIcon("OIP.png");
+                                ImageIcon hongleong = new ImageIcon("pngegg (1).png");
+                                ImageIcon alliance = new ImageIcon("1.png");
+                                ImageIcon standard = new ImageIcon("R.png");
+                                ImageIcon ambank = new ImageIcon("ambank.png");
+
                                 String[] banks = {"RHB", "Maybank", "Hong Leong", "Alliance", "AmBank", "Standard Chartered"};
                                 double[] INTEREST = {2.60, 2.50, 2.30, 2.85, 2.55, 2.65};
-                        
-                                System.out.printf("%-30s %s%n", "Bank", "Interest Rate (%)");
-                                System.out.println("------------------------------------------------");
-                       
-                                for (int i = 0; i < banks.length; i++) {
-                                System.out.printf("%-30s %6.2f%n", banks[i], INTEREST[i]);}
-                                           
-                                System.out.println("------------------------------------------------");
-                                
-                                String input = JOptionPane.showInputDialog("Enter bank interest rate (%): ");
-                    
-                                if (input == null) { 
-                                    JOptionPane.showMessageDialog(null, "Input canceled.", "Ledger System", JOptionPane.INFORMATION_MESSAGE);
-                                    break;
+
+                                JFrame loanFrame = new JFrame("Ledger System");
+                                loanFrame.setTitle("Ledger System");
+                                loanFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                loanFrame.setSize(400, 500);
+                                loanFrame.setResizable(false);
+                            
+                                loanFrame.setLocation(x,200);
+                                loanFrame.setLayout(null);
+
+
+                                JLabel ask = new JLabel();
+                                ask.setText("Please select your bank name");
+                                ask.setBounds(20, 20, 170, 40);
+
+                                JButton RHB = new JButton();
+                                RHB.setBounds(20, 70, 170, 100); // Adjusted height to prevent overlap
+                                RHB.setBorder(BorderFactory.createEtchedBorder());
+                                RHB.setFocusable(false);
+                                RHB.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent e) {
+                                        
+                                        loanFrame.dispose();
+                                        JOptionPane.showMessageDialog(null, "You have selected RHB Bank with interest rate of 2.60% per annum", "Bank Selection", JOptionPane.INFORMATION_MESSAGE);
+                                        rate[0] = INTEREST[0];
+                                        
+                                    }
+                                });
+                                RHB.setIcon(rhb);
+
+                                JButton Maybank = new JButton();
+                                Maybank.setBounds(200, 70, 170, 100); // Positioned next to RHB horizontally
+                                Maybank.setBorder(BorderFactory.createEtchedBorder());
+                                Maybank.setFocusable(false);
+                                Maybank.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent e) {
+                                        
+                                        loanFrame.dispose();
+                                        JOptionPane.showMessageDialog(null, "You have selected Maybank with interest rate of 2.50% per annum", "Bank Selection", JOptionPane.INFORMATION_MESSAGE);
+                                        rate[0] = INTEREST[1];
+                                    }
+                                });
+                                Maybank.setIcon(maybank);
+
+                                JButton HongLeong = new JButton();
+                                HongLeong.setBounds(20, 200, 170, 100); // Positioned below RHB vertically
+                                HongLeong.setBorder(BorderFactory.createEtchedBorder());
+                                HongLeong.setFocusable(false);
+                                HongLeong.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent e) {
+                                        
+                                        loanFrame.dispose();
+                                        JOptionPane.showMessageDialog(null, "You have selected Hong Leong Bank with interest rate of 2.30% per annum", "Bank Selection", JOptionPane.INFORMATION_MESSAGE);
+                                        rate[0] = INTEREST[2];
+                                    }
+                                });
+                                HongLeong.setIcon(hongleong);
+
+                                JButton Alliance = new JButton();
+                                Alliance.setBounds(200, 200, 170, 100); // Positioned next to HongLeong horizontally
+                                Alliance.setBorder(BorderFactory.createEtchedBorder());
+                                Alliance.setFocusable(false);
+                                Alliance.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent e) {
+                                        
+                                        loanFrame.dispose();
+                                        JOptionPane.showMessageDialog(null, "You have selected Alliance Bank with interest rate of 2.85% per annum", "Bank Selection", JOptionPane.INFORMATION_MESSAGE);
+                                        rate[0] = INTEREST[3]; 
+                                    }
+                                });
+                                Alliance.setIcon(alliance);
+
+                                JButton AmBank = new JButton();
+                                AmBank.setBounds(20, 330, 170, 100); // Positioned below HongLeong vertically
+                                AmBank.setBorder(BorderFactory.createEtchedBorder());
+                                AmBank.setFocusable(false);
+                                AmBank.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent e) {
+                                        
+                                        loanFrame.dispose();
+                                        JOptionPane.showMessageDialog(null, "You have selected AmBank with interest rate of 2.55% per annum", "Bank Selection", JOptionPane.INFORMATION_MESSAGE);
+                                        rate[0] = INTEREST[4];
+                                    }
+                                });
+                                AmBank.setIcon(ambank);
+
+                                JButton StandardChartered = new JButton();
+                                StandardChartered.setBounds(200, 330, 170, 100); // Positioned next to AmBank horizontally
+                                StandardChartered.setBorder(BorderFactory.createEtchedBorder());
+                                StandardChartered.setFocusable(false);
+                                StandardChartered.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent e) {
+                                        
+                                        loanFrame.dispose();
+                                        JOptionPane.showMessageDialog(null, "You have selected Standard Chartered Bank with interest rate of 2.65% per annum", "Bank Selection", JOptionPane.INFORMATION_MESSAGE);
+                                        rate[0] = INTEREST[5];
+                                    }
+                                });
+                                StandardChartered.setIcon(standard);
+
+
+
+                                loanFrame.add(RHB);
+                                loanFrame.add(Maybank);
+                                loanFrame.add(HongLeong);
+                                loanFrame.add(Alliance);
+                                loanFrame.add(AmBank);
+                                loanFrame.add(StandardChartered);
+
+                                loanFrame.setIconImage(image.getImage());
+
+
+
+
+                                loanFrame.add(ask); 
+                                loanFrame.setVisible(true);
+                                while (rate[0] == 0) {
+                                    try {
+                                        Thread.sleep(100); 
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                     
-                                double rate = Double.parseDouble(input); 
                     
-                                if (rate < 0) {
+                                
+                    
+                                if (rate[0] < 0) {
                                     JOptionPane.showMessageDialog(null, "Please enter a positive interest rate.", "Ledger System", JOptionPane.WARNING_MESSAGE);
                                 } else {
-                                    double interest = (balance * (rate / 100)) / 12;
+                                    double interest = (balance * (rate[0] / 100)) / 12;
                                     JOptionPane.showMessageDialog(null, String.format("Predicted interest monthly: %.2f", interest));
                                     break; 
                                 }
@@ -942,7 +1059,7 @@ public class LedgerSystem {
     
                 // Display filtered or sorted transactions
 
-                String[][] data = new String[5][100];
+                String[][] data = new String[transactions.size()][5];
                 for (int i = 0; i < count; i++) {
                     Transaction t = transactions.get(i);
                     data[i][0]=String.format("%d",i+1);
