@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import org.mindrot.jbcrypt.BCrypt;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import javax.swing.*;
 import java.awt.event.*;
@@ -17,13 +18,13 @@ import java.util.InputMismatchException;
 
 public class LedgerSystem {
 
+
     public static void main(String[] args) {
         
         Scanner sc=new Scanner(System.in);
         LocalDate CurrentDate = LocalDate.now();
         
         //User Registration Validation
-
 
         String regName=" ";
         String regNameValid= " ";
@@ -567,6 +568,9 @@ public class LedgerSystem {
                                 }
                                 else{
                                     JOptionPane.showMessageDialog(null,"\nCredit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
+                    
+                                    saveCreditToCSV(count + 1, regName, descDebitCredit[1][count], DebitCredit[count], descDebitCredit[0][count], transactionDates[count]);
+
                                     count++;
                                     break;
                                 }
@@ -623,6 +627,9 @@ public class LedgerSystem {
                                 if(YN==0){
                                     SavingActivated = false;
                                     SavingPercent = 0.0;
+
+                                    writeToCSV(regName, SavingPercent, SavingActivated);
+
                                     System.out.println("Saving deactivated successfully");
                                     break;
                                 }
@@ -959,6 +966,30 @@ public class LedgerSystem {
         }
         System.out.println("Ledger System has stop running");   
     }
+
+    public static void writeToCSV(String userID, double savingPercent, boolean savingActivated) {
+        String csvFile = "savingsData.csv"; // Specify your CSV file name
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFile, true))) {
+            // Write the header if the file is empty
+            if (new java.io.File(csvFile).length() == 0) {
+                writer.write("SavingPercent,SavingActivated\n");
+            }
+            // Write the data
+            writer.write(savingPercent + "," + savingActivated + "\n");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error writing to CSV file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void saveCreditToCSV(int transactionID, String userID, String transactionType, double amount, String description, LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("credit.csv", true))) {
+            writer.append(transactionID + "," + userID + "," + transactionType + "," + amount + "," + description + "," + date.format(formatter) + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     
     //Generate hashed version of the password
     public static String hashPassword(String plainPass) {
@@ -990,6 +1021,19 @@ public class LedgerSystem {
             }            
         }
         return value;
+    }
+
+    public static void saveDebitCreditToCSV(List<Transaction> transactions) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("DebitCredit.csv"))) {
+            writer.write("ID,Date,Description,Amount,Type\n"); 
+            for (int i = 0; i < transactions.size(); i++) {
+                Transaction t = transactions.get(i);
+                writer.write((i + 1) + "," + t.date.format(formatter) + "," + t.description + "," + t.amount + "," + t.type + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void filterAndSortHistory(Scanner sc, Double[] DebitCredit, String[][] descDebitCredit, LocalDate[] transactionDates, int count) {
@@ -1128,6 +1172,7 @@ public class LedgerSystem {
                         System.out.println("Invalid option.");
                         return;
                 }
+
     
                 // Display filtered or sorted transactions
 
@@ -1196,6 +1241,8 @@ public class LedgerSystem {
                     }
                 }
 
+                saveDebitCreditToCSV(transactions);
+
                 break;
                 
             } catch (InputMismatchException e) {
@@ -1205,6 +1252,8 @@ public class LedgerSystem {
                 System.out.println("An error occurred: " + e.getMessage());
             }
         }
+
+
     }
     
     static class Transaction {
@@ -1229,4 +1278,6 @@ public class LedgerSystem {
             return amount;
         }
     }
+
+    
 }

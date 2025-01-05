@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\irfan\\Downloads\\jbcrypt-0.4.jar"
+        "c:\\Users\\irfan\\Downloads\\jbcrypt-0.4.jar",
+        "c:\\Users\\User\\Downloads\\Telegram Desktop\\jbcrypt-0.4.jar"
     ]
 }
