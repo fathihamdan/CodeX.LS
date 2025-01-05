@@ -628,8 +628,6 @@ public class LedgerSystem {
                                     SavingActivated = false;
                                     SavingPercent = 0.0;
 
-                                    writeToCSV(regName, SavingPercent, SavingActivated);
-
                                     System.out.println("Saving deactivated successfully");
                                     break;
                                 }
@@ -731,7 +729,7 @@ public class LedgerSystem {
                                 monthlyRepayment = Math.round((totalrepayment/repaymentPeriod)*100.0) / 100.0;
                                 monthsPaid = 0;
                                 
-                                
+                                writeLoanDataToCSV(P, InterestRate, InterestRate, repaymentPeriod, monthlyRepayment, loan);
                                 JOptionPane.showMessageDialog(null,"Your loan has been authorized!"+String.format("\nTotal repayment amount: %.2f",totalrepayment)+String.format("\nMonthly repayment : %.2f\n", monthlyRepayment ));
                                 
                             }else if(choice ==1){ //repay loan
@@ -967,24 +965,20 @@ public class LedgerSystem {
         System.out.println("Ledger System has stop running");   
     }
 
-    public static void writeToCSV(String userID, double savingPercent, boolean savingActivated) {
-        String csvFile = "savingsData.csv"; // Specify your CSV file name
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFile, true))) {
-            // Write the header if the file is empty
-            if (new java.io.File(csvFile).length() == 0) {
-                writer.write("SavingPercent,SavingActivated\n");
-            }
-            // Write the data
-            writer.write(savingPercent + "," + savingActivated + "\n");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error writing to CSV file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     public static void saveCreditToCSV(int transactionID, String userID, String transactionType, double amount, String description, LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("credit.csv", true))) {
             writer.append(transactionID + "," + userID + "," + transactionType + "," + amount + "," + description + "," + date.format(formatter) + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeLoanDataToCSV(double loanAmount, double interestRate, double extraFee, int repaymentPeriod, double monthlyRepayment, Double loanBalance) {
+        String csv = "loan_data.csv";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csv, true))) {
+            String data = loanAmount + "," + interestRate + "," + extraFee + "," + repaymentPeriod + "," + monthlyRepayment + "," + loanBalance + "\n";
+            writer.append(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
