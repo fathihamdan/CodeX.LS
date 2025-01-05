@@ -767,9 +767,9 @@ public class LedgerSystem {
                                         }
                                         
                                     }else if(repayment < monthlyRepayment){
-                                        JOptionPane.showMessageDialog(null,"Insufficient repayment. Please pay the exact monthly repayment amount.");                                        
+                                        JOptionPane.showMessageDialog(null,"Insufficient repayment. Please pay the exact monthly repayment amount: "+monthlyRepayment);                                        
                                     }else{
-                                        JOptionPane.showMessageDialog(null,"Overpayment is not allowed. Please pay the exact monthly repayment amount.");           
+                                        JOptionPane.showMessageDialog(null,"Overpayment is not allowed. Please pay the exact monthly repayment amount: "+monthlyRepayment);           
                                         }
                                     
                                 }else{
@@ -808,7 +808,7 @@ public class LedgerSystem {
                                 ask.setBounds(20, 20, 170, 40);
 
                                 JButton RHB = new JButton();
-                                RHB.setBounds(20, 70, 170, 100); // Adjusted height to prevent overlap
+                                RHB.setBounds(20, 70, 170, 100); 
                                 RHB.setBorder(BorderFactory.createEtchedBorder());
                                 RHB.setFocusable(false);
                                 RHB.addActionListener(new ActionListener() {
@@ -823,7 +823,7 @@ public class LedgerSystem {
                                 RHB.setIcon(rhb);
 
                                 JButton Maybank = new JButton();
-                                Maybank.setBounds(200, 70, 170, 100); // Positioned next to RHB horizontally
+                                Maybank.setBounds(200, 70, 170, 100); 
                                 Maybank.setBorder(BorderFactory.createEtchedBorder());
                                 Maybank.setFocusable(false);
                                 Maybank.addActionListener(new ActionListener() {
@@ -837,7 +837,7 @@ public class LedgerSystem {
                                 Maybank.setIcon(maybank);
 
                                 JButton HongLeong = new JButton();
-                                HongLeong.setBounds(20, 200, 170, 100); // Positioned below RHB vertically
+                                HongLeong.setBounds(20, 200, 170, 100); 
                                 HongLeong.setBorder(BorderFactory.createEtchedBorder());
                                 HongLeong.setFocusable(false);
                                 HongLeong.addActionListener(new ActionListener() {
@@ -851,7 +851,7 @@ public class LedgerSystem {
                                 HongLeong.setIcon(hongleong);
 
                                 JButton Alliance = new JButton();
-                                Alliance.setBounds(200, 200, 170, 100); // Positioned next to HongLeong horizontally
+                                Alliance.setBounds(200, 200, 170, 100); 
                                 Alliance.setBorder(BorderFactory.createEtchedBorder());
                                 Alliance.setFocusable(false);
                                 Alliance.addActionListener(new ActionListener() {
@@ -865,7 +865,7 @@ public class LedgerSystem {
                                 Alliance.setIcon(alliance);
 
                                 JButton AmBank = new JButton();
-                                AmBank.setBounds(20, 330, 170, 100); // Positioned below HongLeong vertically
+                                AmBank.setBounds(20, 330, 170, 100); 
                                 AmBank.setBorder(BorderFactory.createEtchedBorder());
                                 AmBank.setFocusable(false);
                                 AmBank.addActionListener(new ActionListener() {
@@ -879,7 +879,7 @@ public class LedgerSystem {
                                 AmBank.setIcon(ambank);
 
                                 JButton StandardChartered = new JButton();
-                                StandardChartered.setBounds(200, 330, 170, 100); // Positioned next to AmBank horizontally
+                                StandardChartered.setBounds(200, 330, 170, 100); 
                                 StandardChartered.setBorder(BorderFactory.createEtchedBorder());
                                 StandardChartered.setFocusable(false);
                                 StandardChartered.addActionListener(new ActionListener() {
