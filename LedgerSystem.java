@@ -510,10 +510,14 @@ public class LedgerSystem {
 
                                 transactionDates[count] = LocalDate.now();
                                 
-                                if(descDebitCredit[0][count].length()>20){
+                                if(descDebitCredit == null){
+                                    
+                                }
+                                else if(descDebitCredit[0][count].length()>20){
                                     JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
                                     
                                 }
+                                
                                 else{
                                     JOptionPane.showMessageDialog(null,"\nDebit Successfully Recorded!!!\n","Ledger System",JOptionPane.INFORMATION_MESSAGE);
                                     count++;
@@ -562,7 +566,10 @@ public class LedgerSystem {
                                 descDebitCredit[1][count]="Credit";
                                 transactionDates[count] = LocalDate.now();
 
-                                if(descDebitCredit[0][count].length()>20){
+                                if(descDebitCredit[0][count] == null){
+
+                                }
+                                else if(descDebitCredit[0][count].length()>20){
                                     JOptionPane.showMessageDialog(null,"Transaction description exceeded 20 characters. Please try again.","Ledger System",JOptionPane.WARNING_MESSAGE);
                                 }
                                 else{
