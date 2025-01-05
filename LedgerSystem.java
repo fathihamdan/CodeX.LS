@@ -1068,22 +1068,22 @@ public class LedgerSystem {
                     // Sorting option    
                     case 1:
 
-                        int input = JOptionPane.showOptionDialog(null,"Enter sort option: ","Sorting",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"By Date","By Amount","Back"},"By Date (Newest to Oldest)");
+                        int input = JOptionPane.showOptionDialog(null,"Enter sort option: ","Sorting",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"By Date","By Amount","Back"},"By Date (Latest to Oldest)");
                         
                         int sortOption;
                         
                         //by date
                         if(input==0){
-                            sortOption = JOptionPane.showOptionDialog(null,"Sort by date","Sorting",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Newest to Oldest","Oldest to Newest"},"Newest to Oldest");
+                            sortOption = JOptionPane.showOptionDialog(null,"Sort by date","Sorting",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE,null,new String[]{"Latest to Oldest","Oldest to Latest"},"Latest to Oldest");
                         
                             switch (sortOption) {
 
-                                //newest to oldest
+                                //latest to oldest
                                 case 0:
                                     transactions.sort(Comparator.comparing(Transaction::getDate).reversed());
                                     break;
         
-                                //oldest to newest
+                                //oldest to latest
                                 case 1:
                                     transactions.sort(Comparator.comparing(Transaction::getDate));
                                     break;
