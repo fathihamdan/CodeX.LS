@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Viva3Q6",
+            "request": "launch",
+            "mainClass": "Viva3Q6",
+            "projectName": "CodeX.LS_22604fbf"
+        },
+        {
+            "type": "java",
             "name": "LedgerSystem",
             "request": "launch",
             "mainClass": "LedgerSystem",

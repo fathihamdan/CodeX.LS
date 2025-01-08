@@ -1,5 +1,3 @@
-package com.mycompany.viva3q6;
-
 public class Hero {
     private String heroName;
     private String element;
@@ -25,15 +23,13 @@ public class Hero {
             heroElement.equals("Earth") && enemyElement.equals("Water") ||
             heroElement.equals("Light") && enemyElement.equals("Dark") ||
             heroElement.equals("Dark") && enemyElement.equals("Light")) {
-            return 1.5; // Dominant element
+            return 1.5; // dominant element
         } else if (heroElement.equals("Fire") && enemyElement.equals("Water") ||
                    heroElement.equals("Earth") && enemyElement.equals("Fire") ||
-                   heroElement.equals("Light") && enemyElement.equals("Earth") ||
-                   heroElement.equals("Dark") && enemyElement.equals("Light") ||
-                   heroElement.equals("Water") && enemyElement.equals("Dark")) {
-            return 0.5; // Weak element
+                   heroElement.equals("Water") && enemyElement.equals("Earth")) {
+            return 0.5; // weak element
         } else {
-            return 1.0; // Neutral element
+            return 1.0; // neutral element
         }
     }
 
@@ -48,7 +44,7 @@ public class Hero {
     public String getName() {
         return heroName;
     }
-    
+
     @Override
     public String toString() {
         return "Name: " + heroName + "\nElement: " + element + "\nHP: " + hp + "\nAttack: " + attack;

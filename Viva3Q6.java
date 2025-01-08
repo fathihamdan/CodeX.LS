@@ -1,5 +1,3 @@
-package com.mycompany.viva3q6;
-
 public class Viva3Q6 {
     public static void main(String[] args) {
         Hero molly = new Hero("Molly", "Water", 45, 20);
@@ -32,6 +30,6 @@ public class Viva3Q6 {
         team.formTeam();
         System.out.println(team);
 
-        game.battle(team, giemsa);
+        game.battle(team, odin);
     }
 }

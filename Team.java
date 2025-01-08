@@ -1,5 +1,3 @@
-package com.mycompany.viva3q6;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,9 +53,10 @@ public class Team {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Team's HP: ").append(hp).append("\n");
-        for (Hero hero : heroList) {
-            sb.append(hero).append("\n");
+        sb.append("Team's HP: ").append(hp).append("\n\n");
+        for (int i = 0; i < heroList.size(); i++) {
+            sb.append("Hero ").append(i + 1).append("\n");
+            sb.append(heroList.get(i)).append("\n\n");
         }
         return sb.toString();
     }

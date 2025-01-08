@@ -1,5 +1,3 @@
-package com.mycompany.viva3q6;
-
 public class Villain {
     private String villainName;
     private String element;
@@ -41,14 +39,17 @@ public class Villain {
     }
 
     public void decreaseCd() {
-        if (this.currentCd > 0) {
+        if (this.currentCd > 1) {
             this.currentCd--;
         }
     }
-
     public void resetCd() {
-        this.currentCd = this.initialCd;
+        this.currentCd = this.initialCd; 
     }
+
+    public void setCurrentCd(int currentCd) {
+        this.currentCd = currentCd;
+    }  
 
     public int getInitialCd() {
         return initialCd;
